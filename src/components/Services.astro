@@ -1,0 +1,198 @@
+---
+import Button from './Button.astro';
+import SectionLabel from './SectionLabel.astro';
+import Icon, { type IconName } from './icons/Icon.astro';
+import { site } from '../data/site';
+
+const services: { title: string; text: string; icon: IconName }[] = [
+  { title: 'Contabilidade', text: 'Organização, registros e acompanhamento da vida contábil da empresa.', icon: 'calculator' },
+  { title: 'Fiscal e tributário', text: 'Apuração e orientação para uma rotina fiscal clara e bem conduzida.', icon: 'receipt' },
+  { title: 'Trabalhista', text: 'Apoio nas rotinas de folha, admissões, desligamentos e obrigações.', icon: 'users' },
+  { title: 'Societário', text: 'Suporte em abertura, alterações e regularização de empresas.', icon: 'building' },
+  { title: 'Obrigações acessórias', text: 'Preparação e acompanhamento das entregas ligadas à operação.', icon: 'calendar' },
+  { title: 'Orientação próxima', text: 'Leitura do contexto e esclarecimento para apoiar decisões do dia a dia.', icon: 'message' },
+];
+---
+
+<section class="services" id="servicos" aria-labelledby="services-title">
+  <div class="container services__inner">
+    <div class="services__head">
+      <div class="services__heading">
+        <SectionLabel number="02" tone="dark">Serviços</SectionLabel>
+        <h2 class="display" id="services-title">O ESSENCIAL, BEM EXPLICADO E BEM ACOMPANHADO.</h2>
+      </div>
+      <div class="services__intro">
+        <p>Serviços contábeis organizados para dar clareza à rotina e manter você perto das decisões importantes.</p>
+        <Button href={site.whatsappUrl} variant="light" external>Conversar sobre sua empresa</Button>
+      </div>
+    </div>
+
+    <ul class="services__grid">
+      {services.map((service, index) => (
+        <li class="service">
+          <div class="service__top">
+            <span class="service__num">{String(index + 1).padStart(2, '0')}</span>
+            <Icon name={service.icon} size={25} class="service__icon" />
+          </div>
+          <div class="service__body">
+            <h3>{service.title}</h3>
+            <p>{service.text}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <p class="services__note">
+      <span aria-hidden="true">→</span>
+      Cada empresa tem uma rotina própria. O primeiro passo é entender o seu momento e indicar o acompanhamento
+      adequado.
+    </p>
+  </div>
+</section>
+
+<style>
+  .services {
+    background: var(--ink);
+    color: var(--white);
+    padding-block: var(--section-y);
+  }
+
+  .services__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 52px;
+  }
+
+  .services__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 48px;
+  }
+
+  .services__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    max-width: 760px;
+  }
+
+  .services__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    flex: 0 1 380px;
+  }
+
+  .services__intro p {
+    color: var(--line);
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  .services__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .service {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 48px;
+    min-height: 238px;
+    padding: 28px;
+    background: var(--ink-2);
+    outline: 1px solid var(--muted);
+    outline-offset: -1px;
+    transition: background-color 0.2s;
+  }
+
+  .service:hover {
+    background: #2d2d2d;
+  }
+
+  .service__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .service__num {
+    color: var(--line);
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .service :global(.service__icon) {
+    color: var(--red);
+  }
+
+  .service__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .service h3 {
+    font-size: clamp(22px, calc(0.6vw + 18px), 27px);
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .service p {
+    color: var(--line);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .services__note {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: var(--line);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .services__note span {
+    color: var(--red);
+    font-size: 24px;
+    font-weight: 900;
+  }
+
+  @media (max-width: 1024px) {
+    .services__head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 28px;
+    }
+
+    .services__intro {
+      flex-basis: auto;
+      max-width: 560px;
+    }
+
+    .services__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .services__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .service {
+      min-height: 0;
+      gap: 32px;
+      padding: 24px;
+    }
+
+    .services__note {
+      align-items: flex-start;
+    }
+  }
+</style>

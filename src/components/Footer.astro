@@ -1,0 +1,211 @@
+---
+import Logo from './Logo.astro';
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: 'ALFA',
+    links: [
+      { label: 'A empresa', href: '#a-alfa' },
+      { label: 'Nosso jeito', href: '#nosso-jeito' },
+      { label: 'Como atendemos', href: '#como-atendemos' },
+      { label: 'Escritório', href: '#escritorio' },
+    ],
+  },
+  {
+    title: 'Serviços',
+    links: [
+      { label: 'Contabilidade', href: '#servicos' },
+      { label: 'Fiscal e tributário', href: '#servicos' },
+      { label: 'Trabalhista', href: '#servicos' },
+      { label: 'Societário', href: '#servicos' },
+    ],
+  },
+  {
+    title: 'Contato',
+    links: [
+      { label: 'Falar com a equipe', href: site.whatsappUrl, external: true },
+      { label: 'Perguntas frequentes', href: '#duvidas' },
+      { label: 'Como chegar', href: site.mapsUrl, external: true },
+      { label: site.phone.display, href: site.whatsappUrl, external: true },
+      { label: site.email, href: `mailto:${site.email}` },
+    ],
+  },
+];
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <Logo tone="light" />
+        <p>Contabilidade próxima, construída com escuta e atendimento pessoal desde {site.foundingYear}.</p>
+        <div class="footer__office">
+          <span class="footer__heading">Escritório</span>
+          <span class="footer__street">{site.address.street}</span>
+          <span class="footer__city">{site.address.city} — {site.address.state}</span>
+        </div>
+      </div>
+
+      <nav class="footer__nav" aria-label="Rodapé">
+        {columns.map((column) => (
+          <div class="footer__col">
+            <span class="footer__heading">{column.title}</span>
+            <ul>
+              {column.links.map((link) => (
+                <li>
+                  <a href={link.href} {...('external' in link && link.external ? { target: '_blank', rel: 'noopener' } : {})}>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© {year} ALFA Contabilidade. Todos os direitos reservados.</p>
+      <p class="footer__since"><span aria-hidden="true"></span>DESDE {site.foundingYear}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--ink);
+    color: var(--white);
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 68px;
+    padding-top: 68px;
+    padding-bottom: 32px;
+  }
+
+  .footer__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 56px;
+  }
+
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    max-width: 380px;
+  }
+
+  .footer__brand > p {
+    color: var(--line);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .footer__office {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .footer__heading {
+    color: var(--muted-2);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .footer__street {
+    font-size: 15px;
+  }
+
+  .footer__city {
+    color: var(--line);
+    font-size: 14px;
+  }
+
+  .footer__nav {
+    display: flex;
+    gap: 96px;
+  }
+
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .footer__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .footer__col a {
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .footer__col a:hover {
+    color: var(--line);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid var(--muted);
+    color: var(--muted-2);
+    font-size: 11px;
+  }
+
+  .footer__since {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--line);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+
+  .footer__since span {
+    width: 34px;
+    height: 2px;
+    background: var(--navy);
+  }
+
+  @media (max-width: 1100px) {
+    .footer__top {
+      flex-direction: column;
+    }
+
+    .footer__nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 40px;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

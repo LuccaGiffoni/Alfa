@@ -1,0 +1,84 @@
+---
+import Arrow from './icons/Arrow.astro';
+
+interface Props {
+  href: string;
+  variant?: 'dark' | 'red' | 'light';
+  external?: boolean;
+  class?: string;
+}
+const { href, variant = 'dark', external = false, class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['btn', `btn--${variant}`, className]}
+  {...external ? { target: '_blank', rel: 'noopener' } : {}}
+>
+  <span><slot /></span>
+  <Arrow size={17} />
+</a>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    min-height: 56px;
+    padding: 12px 24px;
+    border: 1px solid;
+    border-radius: 2px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.18s,
+      border-color 0.18s,
+      color 0.18s;
+  }
+
+  .btn :global(svg) {
+    flex: none;
+    transition: transform 0.18s;
+  }
+
+  .btn:hover :global(svg) {
+    transform: translate(2px, -2px);
+  }
+
+  .btn--dark {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--white);
+  }
+
+  .btn--dark:hover {
+    background: var(--red);
+    border-color: var(--red);
+  }
+
+  .btn--red {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--white);
+  }
+
+  .btn--red:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .btn--light {
+    background: var(--white);
+    border-color: var(--white);
+    color: var(--ink);
+  }
+
+  .btn--light:hover {
+    background: var(--paper);
+    border-color: var(--paper);
+  }
+</style>

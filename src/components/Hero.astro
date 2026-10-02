@@ -1,0 +1,224 @@
+---
+import Button from './Button.astro';
+import SectionLabel from './SectionLabel.astro';
+import { asset, photos, site } from '../data/site';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__grid">
+    <div class="hero__copy">
+      <div class="hero__top">
+        <SectionLabel muted>Contabilidade em Jacareí</SectionLabel>
+        <h1 class="hero__title" id="hero-title">
+          CONTABILIDADE<br />PRÓXIMA.<br />DECISÕES MAIS<br />SEGURAS.
+        </h1>
+        <div class="hero__lead">
+          <span class="hero__rule" aria-hidden="true"></span>
+          <div class="hero__lead-body">
+            <p>Escuta atenta, orientação clara e atendimento pessoal para cuidar da rotina contábil da sua empresa.</p>
+            <Button href={site.whatsappUrl} variant="red" external>Vamos conversar</Button>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__bottom">
+        <p class="hero__note">Rotina fiscal, contábil, trabalhista e orientação para empresas.</p>
+        <a class="hero__scroll" href="#a-alfa">Role para conhecer ↓</a>
+      </div>
+    </div>
+
+    <figure class="hero__visual">
+      <img
+        src={asset(photos.hero.src)}
+        alt={photos.hero.alt}
+        width={photos.hero.width}
+        height={photos.hero.height}
+        fetchpriority="high"
+      />
+      <span class="hero__glass" aria-hidden="true"></span>
+      <figcaption class="hero__card">
+        <strong>Atendimento pessoal</strong>
+        <span>Conversas que transformam dúvidas em próximos passos.</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 816fr) minmax(0, 624fr);
+    max-width: var(--max);
+    min-height: clamp(640px, calc(100svh - var(--header-h)), 760px);
+    margin-inline: auto;
+  }
+
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 56px;
+    padding: 72px 64px 58px var(--gutter);
+  }
+
+  .hero__top {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    container-type: inline-size;
+  }
+
+  /* Escala pela largura da coluna: "CONTABILIDADE" precisa caber numa linha em qualquer tela. */
+  .hero__title {
+    font-size: min(80px, 11.4cqi);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+  }
+
+  .hero__lead {
+    display: flex;
+    gap: 40px;
+  }
+
+  .hero__rule {
+    flex: none;
+    width: 116px;
+    height: 3px;
+    margin-top: 14px;
+    background: var(--red);
+  }
+
+  .hero__lead-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .hero__lead-body p {
+    color: var(--ink-2);
+    font-size: clamp(18px, 1.4vw, 20px);
+    line-height: 1.5;
+  }
+
+  .hero__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+  }
+
+  .hero__note {
+    max-width: 360px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .hero__scroll {
+    flex: none;
+    color: var(--muted-2);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .hero__scroll:hover {
+    color: var(--ink);
+  }
+
+  .hero__visual {
+    position: relative;
+    overflow: hidden;
+    background: var(--line);
+  }
+
+  .hero__visual img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 17, 17, 0.13);
+  }
+
+  .hero__glass {
+    position: absolute;
+    z-index: 1;
+    left: 69%;
+    top: 5.5%;
+    width: 40%;
+    height: 56%;
+    background: var(--white);
+    opacity: 0.22;
+  }
+
+  .hero__card {
+    position: absolute;
+    z-index: 2;
+    left: 32px;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: min(276px, calc(100% - 64px));
+    padding: 18px;
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  .hero__card strong {
+    color: var(--red);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .hero__card span {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 960px) {
+    .hero__grid {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .hero__copy {
+      padding: 56px var(--gutter) 48px;
+    }
+
+    .hero__visual {
+      height: clamp(380px, 90vw, 600px);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero__lead {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .hero__rule {
+      width: 64px;
+      margin-top: 0;
+    }
+
+    .hero__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

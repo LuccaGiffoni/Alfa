@@ -1,0 +1,173 @@
+---
+import SectionLabel from './SectionLabel.astro';
+
+const steps = [
+  { title: 'Primeira conversa', text: 'Você apresenta a empresa, a rotina e as dúvidas que precisam de atenção.' },
+  { title: 'Leitura do cenário', text: 'Organizamos as informações e entendemos o que precisa ser conduzido.' },
+  { title: 'Plano de atendimento', text: 'Alinhamos responsabilidades, fluxo de documentos e próximos passos.' },
+  { title: 'Acompanhamento', text: 'Mantemos contato para orientar a rotina e esclarecer decisões.' },
+];
+---
+
+<section class="process" id="como-atendemos" aria-labelledby="process-title">
+  <div class="container process__inner">
+    <div class="process__head">
+      <div class="process__heading">
+        <SectionLabel number="04">Como atendemos</SectionLabel>
+        <h2 class="display" id="process-title">UM PROCESSO CLARO, DO PRIMEIRO CONTATO AO DIA A DIA.</h2>
+      </div>
+      <p class="process__intro">
+        Sem respostas prontas antes de ouvir. O atendimento começa pelo entendimento e continua com presença.
+      </p>
+    </div>
+
+    <ol class="steps">
+      {steps.map((step, index) => (
+        <li class="step">
+          <div class="step__top">
+            <span class="step__num">{String(index + 1).padStart(2, '0')}</span>
+            <span class="step__dot" aria-hidden="true"></span>
+          </div>
+          <div class="step__body">
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process {
+    background: var(--white);
+    padding-block: var(--section-y);
+  }
+
+  .process__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .process__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 48px;
+  }
+
+  .process__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    max-width: 720px;
+  }
+
+  .process__intro {
+    flex: 0 1 390px;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  /* Bordas compartilhadas: a lista desenha topo/esquerda e cada passo desenha direita/base. */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 40px;
+    min-height: 274px;
+    padding: 28px 24px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    background: var(--white);
+  }
+
+  .step:first-child {
+    background: var(--paper);
+  }
+
+  .step__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .step__num {
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  .step__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ink);
+  }
+
+  .step:first-child .step__dot {
+    background: var(--terracotta);
+  }
+
+  .step__body {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .step h3 {
+    font-size: 23px;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+
+  .step p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1024px) {
+    .process__head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .process__intro {
+      flex-basis: auto;
+      max-width: 560px;
+    }
+
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .step {
+      min-height: 220px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+
+    .step {
+      min-height: 0;
+      gap: 28px;
+    }
+  }
+</style>

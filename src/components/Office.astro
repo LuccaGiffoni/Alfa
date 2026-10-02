@@ -1,0 +1,179 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import TextLink from './TextLink.astro';
+import Icon from './icons/Icon.astro';
+import { asset, photos, site } from '../data/site';
+---
+
+<section class="office" id="escritorio" aria-labelledby="office-title">
+  <div class="office__grid">
+    <figure class="office__visual">
+      <img
+        src={asset(photos.office.src)}
+        alt={photos.office.alt}
+        width={photos.office.width}
+        height={photos.office.height}
+        loading="lazy"
+      />
+      <figcaption class="office__tag">
+        <Icon name="pin" size={16} strokeWidth={2} />
+        {site.address.city}
+      </figcaption>
+    </figure>
+
+    <div class="office__copy">
+      <SectionLabel number="06">Onde estamos</SectionLabel>
+
+      <div class="office__address">
+        <h2 class="display" id="office-title" style="--max-size: 58px">NOSSO ESCRITÓRIO EM JACAREÍ.</h2>
+        <span class="office__rule" aria-hidden="true"></span>
+        <address>
+          <a class="office__street" href={site.mapsUrl} target="_blank" rel="noopener">{site.address.street}</a>
+          <span class="office__city">{site.address.city} — {site.address.state}</span>
+        </address>
+      </div>
+
+      <div class="office__footer">
+        <p>Um espaço para sentar, conversar com calma e entender o que sua empresa precisa.</p>
+        <div class="office__links">
+          <TextLink href={site.whatsappUrl} external>Falar com a equipe</TextLink>
+          <TextLink href={site.mapsUrl} external>Como chegar</TextLink>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .office {
+    background: var(--paper);
+  }
+
+  .office__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: var(--max);
+    min-height: 650px;
+    margin-inline: auto;
+  }
+
+  .office__visual {
+    position: relative;
+    overflow: hidden;
+    background: var(--line);
+  }
+
+  .office__visual img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .office__tag {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--white);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .office__tag :global(svg) {
+    color: var(--terracotta);
+  }
+
+  .office__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 48px;
+    padding: 76px var(--gutter) 70px 64px;
+  }
+
+  .office__address {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .office__rule {
+    width: 96px;
+    height: 4px;
+    background: var(--red);
+  }
+
+  address {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-style: normal;
+  }
+
+  .office__street {
+    font-size: clamp(22px, calc(0.8vw + 14px), 26px);
+    line-height: 1.35;
+    text-decoration: none;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
+  }
+
+  .office__street:hover {
+    text-decoration-line: underline;
+    text-decoration-color: var(--red);
+  }
+
+  .office__city {
+    color: var(--muted);
+    font-size: 17px;
+  }
+
+  .office__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .office__footer p {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .office__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+  }
+
+  @media (max-width: 960px) {
+    .office__grid {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .office__visual {
+      aspect-ratio: 4 / 3;
+    }
+
+    .office__copy {
+      padding: 56px var(--gutter) var(--section-y);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .office__tag {
+      top: 16px;
+      left: 16px;
+    }
+  }
+</style>

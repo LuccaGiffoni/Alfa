@@ -1,0 +1,184 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import { asset, photos, site } from '../data/site';
+
+const points = [
+  { title: 'Contato próximo', text: 'Espaço para perguntar, compreender e decidir.' },
+  { title: 'Acompanhamento contínuo', text: 'Atenção à rotina, não só aos prazos.' },
+];
+---
+
+<section class="approach" id="nosso-jeito" aria-labelledby="approach-title">
+  <div class="approach__grid">
+    <div class="approach__copy">
+      <SectionLabel number="03">Nosso jeito</SectionLabel>
+
+      <div class="approach__text">
+        <h2 class="display" id="approach-title" style="--max-size: 60px">A TECNOLOGIA AJUDA. A PRESENÇA ORIENTA.</h2>
+        <p>
+          Usamos ferramentas para organizar o trabalho, mas não substituímos conversa por distância. Quando surge uma
+          dúvida, você encontra escuta, contexto e uma explicação que faz sentido para a sua empresa.
+        </p>
+      </div>
+
+      <ul class="approach__points">
+        {points.map((point) => (
+          <li>
+            <span class="approach__dot" aria-hidden="true"></span>
+            <h3>{point.title}</h3>
+            <p>{point.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="approach__visual">
+      <img
+        src={asset(photos.approach.src)}
+        alt={photos.approach.alt}
+        width={photos.approach.width}
+        height={photos.approach.height}
+        loading="lazy"
+      />
+      <div class="approach__band">
+        <p>Perto o bastante para entender o que não cabe em um formulário.</p>
+        <span>ALFA / {site.foundingYear}—HOJE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .approach {
+    background: var(--paper);
+  }
+
+  .approach__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 760fr) minmax(0, 680fr);
+    max-width: var(--max);
+    min-height: 790px;
+    margin-inline: auto;
+  }
+
+  .approach__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 48px;
+    padding: 92px 72px 80px var(--gutter);
+  }
+
+  .approach__text {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .approach__text p {
+    color: var(--muted);
+    font-size: clamp(17px, calc(0.4vw + 14px), 20px);
+    line-height: 1.55;
+  }
+
+  .approach__points {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    width: 100%;
+  }
+
+  .approach__points li {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 2px solid var(--ink);
+  }
+
+  .approach__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
+  .approach__points h3 {
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .approach__points p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .approach__visual {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .approach__visual img {
+    flex: 1 1 610px;
+    width: 100%;
+    min-height: 0;
+    object-fit: cover;
+  }
+
+  .approach__band {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    min-height: 180px;
+    padding: 32px 34px;
+    background: var(--terracotta);
+    color: var(--white);
+  }
+
+  .approach__band p {
+    max-width: 350px;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .approach__band span {
+    flex: none;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 960px) {
+    .approach__grid {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .approach__copy {
+      padding: var(--section-y) var(--gutter) 56px;
+    }
+
+    .approach__visual img {
+      flex: none;
+      aspect-ratio: 4 / 3;
+      height: auto;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .approach__points {
+      grid-template-columns: 1fr;
+    }
+
+    .approach__band {
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 0;
+      padding: 28px var(--gutter);
+    }
+  }
+</style>

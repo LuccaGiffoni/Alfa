@@ -1,0 +1,212 @@
+---
+import Button from './Button.astro';
+import Logo from './Logo.astro';
+import { nav, site } from '../data/site';
+---
+
+<header class="header" data-header>
+  <div class="container header__inner">
+    <Logo />
+
+    <nav class="nav" id="menu" aria-label="Principal">
+      <ul class="nav__list">
+        {nav.map((item) => (
+          <li>
+            <a class="nav__link" href={item.href}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+      <Button class="nav__cta" href={site.whatsappUrl} external>Falar com a ALFA</Button>
+    </nav>
+
+    <div class="header__actions">
+      <Button class="header__cta" href={site.whatsappUrl} external>Falar com a ALFA</Button>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+        <span class="sr-only" data-menu-label>Abrir menu</span>
+        <span class="menu-toggle__bars" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = header?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const label = header?.querySelector<HTMLElement>('[data-menu-label]');
+
+  function setOpen(open: boolean) {
+    if (!header || !toggle || !label) return;
+    header.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    label.textContent = open ? 'Fechar menu' : 'Abrir menu';
+  }
+
+  toggle?.addEventListener('click', () => setOpen(!header?.classList.contains('is-open')));
+  header?.querySelectorAll('.nav a').forEach((link) => link.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && header?.classList.contains('is-open')) {
+      setOpen(false);
+      toggle?.focus();
+    }
+  });
+  window.matchMedia('(min-width: 1025px)').addEventListener('change', (event) => {
+    if (event.matches) setOpen(false);
+  });
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: var(--header-h);
+  }
+
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nav__link {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
+  }
+
+  .nav__link:hover {
+    text-decoration-line: underline;
+    text-decoration-color: var(--red);
+  }
+
+  .nav :global(.nav__cta) {
+    display: none;
+  }
+
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .menu-toggle {
+    display: none;
+    position: relative;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .menu-toggle__bars,
+  .menu-toggle__bars::before,
+  .menu-toggle__bars::after {
+    position: absolute;
+    left: 50%;
+    width: 20px;
+    height: 2px;
+    margin-left: -10px;
+    background: currentColor;
+    transition:
+      transform 0.2s,
+      opacity 0.2s;
+  }
+
+  .menu-toggle__bars {
+    top: 50%;
+    margin-top: -1px;
+  }
+
+  .menu-toggle__bars::before,
+  .menu-toggle__bars::after {
+    content: '';
+    left: 0;
+    margin-left: 0;
+  }
+
+  .menu-toggle__bars::before {
+    top: -6px;
+  }
+
+  .menu-toggle__bars::after {
+    top: 6px;
+  }
+
+  .header.is-open .menu-toggle__bars {
+    background: transparent;
+  }
+
+  .header.is-open .menu-toggle__bars::before {
+    transform: translateY(6px) rotate(45deg);
+    background: var(--ink);
+  }
+
+  .header.is-open .menu-toggle__bars::after {
+    transform: translateY(-6px) rotate(-45deg);
+    background: var(--ink);
+  }
+
+  @media (max-width: 1024px) {
+    .menu-toggle {
+      display: block;
+    }
+
+    .nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 24px;
+      padding: 8px var(--gutter) 28px;
+      background: var(--paper);
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .header.is-open .nav {
+      display: flex;
+    }
+
+    .nav__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .nav__link {
+      display: block;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .header__actions :global(.header__cta) {
+      display: none;
+    }
+
+    .nav :global(.nav__cta) {
+      display: inline-flex;
+    }
+  }
+</style>

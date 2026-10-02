@@ -1,0 +1,124 @@
+---
+import Button from './Button.astro';
+import SectionLabel from './SectionLabel.astro';
+import { site } from '../data/site';
+---
+
+<section class="cta" id="contato" aria-labelledby="cta-title">
+  <div class="container cta__inner">
+    <div class="cta__copy">
+      <SectionLabel tone="dark" dot="navy">Próximo passo</SectionLabel>
+      <h2 class="display" id="cta-title" style="--max-size: 68px">SUA EMPRESA PRECISA DE UMA CONVERSA MAIS PRÓXIMA?</h2>
+      <p>Conte o seu momento. A ALFA ouve, organiza e orienta os próximos passos com clareza.</p>
+    </div>
+
+    <div class="cta__actions">
+      <Button href={site.whatsappUrl} variant="light" external>Falar com a ALFA</Button>
+      <p>Atendimento próximo, com escritório em {site.address.city}.</p>
+      <ul class="cta__contacts">
+        <li>
+          <span>WhatsApp</span>
+          <a href={site.whatsappUrl} target="_blank" rel="noopener">{site.phone.display}</a>
+        </li>
+        <li>
+          <span>E-mail</span>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .cta__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 48px;
+    min-height: 430px;
+    padding-block: 72px;
+  }
+
+  .cta__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    max-width: 850px;
+  }
+
+  .cta__copy > p {
+    max-width: 640px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 0 0 310px;
+  }
+
+  .cta__actions > p {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .cta__contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .cta__contacts li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cta__contacts span {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .cta__contacts a {
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .cta__contacts a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 1024px) {
+    .cta__inner {
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 0;
+      padding-block: var(--section-y);
+    }
+
+    .cta__actions {
+      flex-basis: auto;
+      max-width: 360px;
+    }
+  }
+</style>
