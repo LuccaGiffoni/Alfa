@@ -1,6 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import SectionLabel from './SectionLabel.astro';
-import { asset, photos, site } from '../data/site';
+import { photos, site } from '../data/site';
 
 const points = [
   { title: 'Contato próximo', text: 'Espaço para perguntar, compreender e decidir.' },
@@ -33,13 +34,7 @@ const points = [
     </div>
 
     <div class="approach__visual">
-      <img
-        src={asset(photos.approach.src)}
-        alt={photos.approach.alt}
-        width={photos.approach.width}
-        height={photos.approach.height}
-        loading="lazy"
-      />
+      <Image src={photos.approach.src} alt={photos.approach.alt} loading="lazy" />
       <div class="approach__band">
         <p>Perto o bastante para entender o que não cabe em um formulário.</p>
         <span>ALFA / {site.foundingYear}—HOJE</span>

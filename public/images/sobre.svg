@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="620" height="320" viewBox="0 0 620 320">
-  <defs><pattern id="p" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="24" height="24" fill="#D8D6CE"/><rect width="2" height="24" fill="#CFCDC4"/></pattern></defs>
-  <rect width="620" height="320" fill="url(#p)"/>
-  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" letter-spacing="1.5" fill="#7A7A72">FOTO · EQUIPE</text>
-</svg>

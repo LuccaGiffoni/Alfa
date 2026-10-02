@@ -1,3 +1,8 @@
+import atendimentoPresencial from '../assets/images/atendimento-presencial.png';
+import detalhesDoAtendimento from '../assets/images/detalhes-do-atendimento.png';
+import fachada from '../assets/images/fachada.png';
+import reuniao from '../assets/images/reuniao.png';
+
 /**
  * Dados da ALFA usados em todo o site. Para mudar contato, endereço ou fotos, mude aqui.
  */
@@ -32,15 +37,24 @@ export function asset(path: string): string {
   return `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
 }
 
-/**
- * Fotos do site. Os arquivos atuais são marcadores de lugar: troque pelas fotos reais em
- * `public/images/` (mesmo nome, ou ajuste o caminho aqui) e revise o texto alternativo.
- */
+/** Fotos do site. O Astro converte para WebP no build; para trocar, substitua o arquivo em src/assets/images/. */
 export const photos = {
-  hero: { src: 'images/hero.svg', alt: 'Atendimento na ALFA Contabilidade', width: 624, height: 760 },
-  about: { src: 'images/sobre.svg', alt: 'Equipe da ALFA em conversa com um cliente', width: 620, height: 320 },
-  approach: { src: 'images/nosso-jeito.svg', alt: 'Reunião de acompanhamento no escritório', width: 680, height: 610 },
-  office: { src: 'images/escritorio.svg', alt: 'Fachada do escritório da ALFA em Jacareí', width: 720, height: 650 },
+  hero: {
+    src: atendimentoPresencial,
+    alt: 'Duas mulheres conversam sorrindo à mesa de um escritório de contabilidade, com cadernos e pastas de documentos.',
+  },
+  about: {
+    src: detalhesDoAtendimento,
+    alt: 'Uma contadora e um cliente revisam juntos uma planilha impressa sobre a mesa.',
+  },
+  approach: {
+    src: reuniao,
+    alt: 'Três pessoas em reunião ao redor de uma mesa com papéis, diante de estantes com pastas de arquivo.',
+  },
+  office: {
+    src: fachada,
+    alt: 'Mulher sorridente na porta de entrada do escritório, com a recepção ao fundo e vasos de plantas na calçada.',
+  },
 } as const;
 
 export const nav = [

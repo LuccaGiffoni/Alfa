@@ -1,7 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Button from './Button.astro';
 import SectionLabel from './SectionLabel.astro';
-import { asset, photos, site } from '../data/site';
+import { photos, site } from '../data/site';
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -28,13 +29,7 @@ import { asset, photos, site } from '../data/site';
     </div>
 
     <figure class="hero__visual">
-      <img
-        src={asset(photos.hero.src)}
-        alt={photos.hero.alt}
-        width={photos.hero.width}
-        height={photos.hero.height}
-        fetchpriority="high"
-      />
+      <Image src={photos.hero.src} alt={photos.hero.alt} loading="eager" fetchpriority="high" />
       <span class="hero__glass" aria-hidden="true"></span>
       <figcaption class="hero__card">
         <strong>Atendimento pessoal</strong>

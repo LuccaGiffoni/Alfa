@@ -1,7 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import SectionLabel from './SectionLabel.astro';
 import TextLink from './TextLink.astro';
-import { asset, photos } from '../data/site';
+import { photos } from '../data/site';
 
 const pillars = [
   { title: 'Escuta antes da resposta', text: 'Entender o contexto vem antes de orientar.' },
@@ -17,13 +18,7 @@ const pillars = [
     <div class="about__grid">
       <div class="about__main">
         <h2 class="display" id="about-title">CONTABILIDADE COMEÇA COM UMA BOA CONVERSA.</h2>
-        <img
-          src={asset(photos.about.src)}
-          alt={photos.about.alt}
-          width={photos.about.width}
-          height={photos.about.height}
-          loading="lazy"
-        />
+        <Image src={photos.about.src} alt={photos.about.alt} loading="lazy" />
       </div>
 
       <div class="about__side">

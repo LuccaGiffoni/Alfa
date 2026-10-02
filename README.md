@@ -19,12 +19,12 @@ npm run preview  # serve o dist/ localmente
 | O quê | Onde |
 | --- | --- |
 | E-mail, WhatsApp, endereço, ano de fundação | `src/data/site.ts` |
-| Fotos (hoje são marcadores de lugar) | `public/images/` + caminhos e textos alternativos em `src/data/site.ts` |
+| Fotos | `src/assets/images/` (textos alternativos em `src/data/site.ts`) |
 | Textos de cada seção | `src/components/<Seção>.astro` |
 | Cores, fonte, espaçamentos | `src/styles/global.css` (variáveis em `:root`) |
 | Título e descrição para buscadores | `src/pages/index.astro` |
 
-Para trocar uma foto, coloque o arquivo em `public/images/` (de preferência `.jpg` ou `.webp`, com até ~300 KB) e ajuste o `src` correspondente em `photos`, dentro de `src/data/site.ts`.
+Para trocar uma foto, substitua o arquivo em `src/assets/images/` (mesmo nome) ou importe outro em `src/data/site.ts`. O build converte as fotos para WebP automaticamente.
 
 ## Deploy (GitHub Pages)
 

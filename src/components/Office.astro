@@ -1,20 +1,15 @@
 ---
+import { Image } from 'astro:assets';
 import SectionLabel from './SectionLabel.astro';
 import TextLink from './TextLink.astro';
 import Icon from './icons/Icon.astro';
-import { asset, photos, site } from '../data/site';
+import { photos, site } from '../data/site';
 ---
 
 <section class="office" id="escritorio" aria-labelledby="office-title">
   <div class="office__grid">
     <figure class="office__visual">
-      <img
-        src={asset(photos.office.src)}
-        alt={photos.office.alt}
-        width={photos.office.width}
-        height={photos.office.height}
-        loading="lazy"
-      />
+      <Image src={photos.office.src} alt={photos.office.alt} loading="lazy" />
       <figcaption class="office__tag">
         <Icon name="pin" size={16} strokeWidth={2} />
         {site.address.city}
