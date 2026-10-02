@@ -8,7 +8,7 @@ Requer Node 22 ou mais recente.
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321/Alfa/
+npm run dev      # http://localhost:4321/
 npm run check    # checagem de tipos do Astro
 npm run build    # gera o site em dist/
 npm run preview  # serve o dist/ localmente
@@ -28,12 +28,11 @@ Para trocar uma foto, coloque o arquivo em `public/images/` (de preferência `.j
 
 ## Deploy (GitHub Pages)
 
-Cada push na `main` dispara o workflow `.github/workflows/deploy.yml`. Ele roda checagem e build, e publica o resultado em https://luccagiffoni.github.io/Alfa/.
+Cada push na `main` dispara o workflow `.github/workflows/deploy.yml`. Ele roda checagem e build, e publica o resultado em https://alfa-contabilidade.com (domínio em `public/CNAME` e `site` em `astro.config.mjs`).
 
-É preciso ativar uma vez: no GitHub, **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+É preciso configurar uma vez no GitHub, em **Settings → Pages**:
 
-### Domínio próprio
+- **Build and deployment → Source: GitHub Actions**;
+- **Custom domain:** `alfa-contabilidade.com`, e depois **Enforce HTTPS**.
 
-1. Em `astro.config.mjs`, troque `site` pelo domínio (ex.: `https://alfacontabilidade.com.br`) e `base` por `'/'`.
-2. Crie `public/CNAME` com o domínio numa única linha.
-3. Configure o DNS conforme a [documentação do GitHub Pages](https://docs.github.com/pages/configuring-a-custom-domain-for-your-github-pages-site) e informe o domínio em **Settings → Pages**.
+O DNS do domínio precisa apontar para o GitHub Pages: registros `A` do domínio raiz para `185.199.108.153`, `185.199.109.153`, `185.199.110.153` e `185.199.111.153`, e um `CNAME` de `www` para `luccagiffoni.github.io` ([documentação](https://docs.github.com/pages/configuring-a-custom-domain-for-your-github-pages-site)).
