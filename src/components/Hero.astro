@@ -30,7 +30,7 @@ import { photos, site } from '../data/site';
     </div>
 
     <figure class="hero__visual">
-      <Image src={photos.hero.src} alt={photos.hero.alt} loading="eager" fetchpriority="high" />
+      <Image src={photos.hero.src} alt={photos.hero.alt} widths={[480, 768, 1024]} sizes="(max-width: 960px) 100vw, 44vw" quality={85} loading="eager" fetchpriority="high" />
       <span class="hero__glass" aria-hidden="true"></span>
       <figcaption class="hero__card">
         <strong>Seu negócio tem nome.</strong>

@@ -1,19 +1,18 @@
 ---
-import { Image } from 'astro:assets';
 import SectionLabel from './SectionLabel.astro';
 import TextLink from './TextLink.astro';
-import Icon from './icons/Icon.astro';
-import { photos, site } from '../data/site';
+import { site } from '../data/site';
 ---
 
 <section class="office" id="escritorio" aria-labelledby="office-title">
   <div class="office__grid">
     <figure class="office__visual">
-      <Image src={photos.office.src} alt={photos.office.alt} loading="lazy" />
-      <figcaption class="office__tag">
-        <Icon name="pin" size={16} strokeWidth={2} />
-        {site.address.city}
-      </figcaption>
+      <iframe
+        src={site.mapsEmbedUrl}
+        title={`Localização da Alfa Contabilidade: ${site.address.street}, ${site.address.city} — ${site.address.state}`}
+        width="720" height="650" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+      ></iframe>
+      <figcaption class="sr-only">Google Maps: {site.address.street}, {site.address.city} — {site.address.state}.</figcaption>
     </figure>
 
     <div class="office__copy">
@@ -58,12 +57,12 @@ import { photos, site } from '../data/site';
     background: var(--line);
   }
 
-  .office__visual img {
+  .office__visual iframe {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    border: 0;
   }
 
   .office__tag {

@@ -34,7 +34,7 @@ const points = [
     </div>
 
     <div class="approach__visual">
-      <Image src={photos.approach.src} alt={photos.approach.alt} loading="lazy" />
+      <Image src={photos.approach.src} alt={photos.approach.alt} widths={[480, 800, 1200, 1536]} sizes="(max-width: 960px) 100vw, 50vw" quality={85} loading="lazy" />
       <div class="approach__band">
         <p>Perto o bastante para entender o que não cabe em um formulário.</p>
         <span>ALFA / {site.foundingYear}—HOJE</span>

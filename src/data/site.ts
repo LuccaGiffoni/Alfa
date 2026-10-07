@@ -1,7 +1,6 @@
-import atendimentoPresencial from '../assets/images/atendimento-presencial.png';
-import detalhesDoAtendimento from '../assets/images/detalhes-do-atendimento.png';
-import fachada from '../assets/images/fachada.png';
-import reuniao from '../assets/images/reuniao.png';
+import atendimentoPresencial from '../assets/images/atendimento-premium.png';
+import detalhesDoAtendimento from '../assets/images/detalhes-premium.png';
+import reuniao from '../assets/images/reuniao-premium.png';
 
 /**
  * Dados da ALFA usados em todo o site. Para mudar contato, endereço ou fotos, mude aqui.
@@ -27,6 +26,7 @@ export const site = {
   },
   whatsappUrl: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappGreeting)}`,
   address,
+  mapsEmbedUrl: `https://maps.google.com/maps?q=${encodeURIComponent(`${address.street}, ${address.city} - ${address.state}, Brasil`)}&z=17&hl=pt-BR&output=embed`,
   mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     `${address.street}, ${address.city} - ${address.state}`,
   )}`,
@@ -41,19 +41,15 @@ export function asset(path: string): string {
 export const photos = {
   hero: {
     src: atendimentoPresencial,
-    alt: 'Duas mulheres conversam sorrindo à mesa de um escritório de contabilidade, com cadernos e pastas de documentos.',
+    alt: 'Cena ilustrativa de um contador e uma empresária analisando documentos em uma mesa de escritório.',
   },
   about: {
     src: detalhesDoAtendimento,
-    alt: 'Uma contadora e um cliente revisam juntos uma planilha impressa sobre a mesa.',
+    alt: 'Cena ilustrativa de mãos revisando relatórios financeiros, com calculadora e caderno azul sobre a mesa.',
   },
   approach: {
     src: reuniao,
-    alt: 'Três pessoas em reunião ao redor de uma mesa com papéis, diante de estantes com pastas de arquivo.',
-  },
-  office: {
-    src: fachada,
-    alt: 'Mulher sorridente na porta de entrada do escritório, com a recepção ao fundo e vasos de plantas na calçada.',
+    alt: 'Cena ilustrativa de três profissionais conversando sobre documentos em um escritório com luz natural.',
   },
 } as const;
 
