@@ -2,7 +2,8 @@
 import Button from './Button.astro';
 import SectionLabel from './SectionLabel.astro';
 import Icon, { type IconName } from './icons/Icon.astro';
-import { site } from '../data/site';
+import { asset, site } from '../data/site';
+import { servicePages } from '../data/services';
 
 const services: { title: string; text: string; icon: IconName }[] = [
   { title: 'Contabilidade', text: 'Organização, registros e acompanhamento da vida contábil da empresa.', icon: 'calculator' },
@@ -19,7 +20,7 @@ const services: { title: string; text: string; icon: IconName }[] = [
     <div class="services__head">
       <div class="services__heading">
         <SectionLabel number="02" tone="dark">Serviços</SectionLabel>
-        <h2 class="display" id="services-title">O ESSENCIAL, BEM EXPLICADO E BEM ACOMPANHADO.</h2>
+        <h2 class="display" id="services-title">MENOS DÚVIDAS NA ROTINA. MAIS CLAREZA PARA DECIDIR.</h2>
       </div>
       <div class="services__intro">
         <p>Serviços contábeis organizados para dar clareza à rotina e manter você perto das decisões importantes.</p>
@@ -38,9 +39,14 @@ const services: { title: string; text: string; icon: IconName }[] = [
             <h3>{service.title}</h3>
             <p>{service.text}</p>
           </div>
+          <a class="service__link" href={`https://wa.me/${site.phone.e164.replace('+', '')}?text=${encodeURIComponent(`Olá! Gostaria de conversar sobre ${service.title.toLowerCase()} para minha empresa.`)}`} target="_blank" rel="noopener">Conversar sobre este serviço <span aria-hidden="true">↗</span></a>
         </li>
       ))}
     </ul>
+
+    <nav aria-label="Conheça os serviços em detalhe" class="services__details">
+      {servicePages.map(service => <a href={asset(`servicos/${service.slug}/`)}>{service.name} em Jacareí <span aria-hidden="true">↗</span></a>)}
+    </nav>
 
     <p class="services__note">
       <span aria-hidden="true">→</span>
@@ -62,6 +68,8 @@ const services: { title: string; text: string; icon: IconName }[] = [
     flex-direction: column;
     gap: 52px;
   }
+  .services__details { display: flex; flex-wrap: wrap; gap: 16px 28px; }
+  .services__details a { font-size: 14px; text-underline-offset: 5px; }
 
   .services__head {
     display: flex;
@@ -113,6 +121,7 @@ const services: { title: string; text: string; icon: IconName }[] = [
   .service:hover {
     background: #2d2d2d;
   }
+  .service__link { font-size: 13px; font-weight: 650; text-underline-offset: 5px; }
 
   .service__top {
     display: flex;

@@ -6,5 +6,5 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://alfa-contabilidade.com',
   base: '/',
-  trailingSlash: 'ignore',
+  trailingSlash: 'always',
 });

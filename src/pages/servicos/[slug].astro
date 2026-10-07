@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Button from '../../components/Button.astro';
+import { asset, site } from '../../data/site';
+import { servicePages } from '../../data/services';
+export function getStaticPaths() {
+  return servicePages.map(service => ({ params: { slug: service.slug }, props: { service } }));
+}
+const { service } = Astro.props;
+const root = new URL(import.meta.env.BASE_URL, Astro.site).href;
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const schema = { '@context': 'https://schema.org', '@graph': [
+  { '@type': 'Service', '@id': `${url}#servico`, name: service.name, description: service.description, url, serviceType: service.name, areaServed: { '@type': 'City', name: 'Jacareí' }, provider: { '@id': `${root}#empresa` } },
+  { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Início', item: root }, { '@type': 'ListItem', position: 2, name: service.name, item: url }] },
+] };
+---
+<Base title={service.title} description={service.description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <Header />
+  <main id="conteudo" class="service-page container">
+    <nav class="breadcrumbs" aria-label="Caminho da página"><a href={asset('')}>Início</a><span aria-hidden="true"> / </span><span aria-current="page">{service.name}</span></nav>
+    <p class="eyebrow">ALFA CONTABILIDADE · DESDE 1981</p>
+    <h1>{service.name} em Jacareí</h1>
+    <p class="lead">{service.intro}</p>
+    <Button href={`https://wa.me/${site.phone.e164.replace('+', '')}?text=${encodeURIComponent(`Olá! Gostaria de conversar sobre ${service.name.toLowerCase()} com a Alfa.`)}`} variant="red" external>Conversar sobre este serviço</Button>
+    <div class="service-page__grid">
+      <article>
+        <h2>{service.heading}</h2><p>{service.body}</p>
+        <h2>Como a Alfa pode ajudar</h2><ul>{service.items.map(item => <li>{item}</li>)}</ul>
+        <h2>O que preparar para a primeira conversa</h2><p>{service.preparation}</p>
+        <h2>{service.question}</h2><p>{service.answer}</p>
+      </article>
+      <aside aria-label="Contato e outros serviços">
+        <h2>Vamos falar da sua empresa?</h2><p>Atendimento pessoal em {site.address.city}, São Paulo.</p>
+        <address>{site.address.street}<br />{site.address.city} — {site.address.state}<br /><a href={`tel:${site.phone.e164}`}>{site.phone.display}</a></address>
+        <a href={site.mapsUrl} target="_blank" rel="noopener">Como chegar ao escritório ↗</a>
+        <h2>Outras soluções</h2><ul>{servicePages.filter(item => item.slug !== service.slug).map(item => <li><a href={asset(`servicos/${item.slug}/`)}>{item.name}</a></li>)}</ul>
+      </aside>
+    </div>
+    <a href={asset('#servicos')}>← Ver serviços na página inicial</a>
+  </main>
+  <Footer />
+</Base>
+<style>
+  .service-page { padding-block: 36px 80px; }
+  .breadcrumbs { font-size: 14px; color: var(--muted); margin-bottom: 56px; }
+  .eyebrow { color: var(--red); font-size: 12px; font-weight: 750; letter-spacing: .08em; margin-bottom: 16px; }
+  h1 { font-size: clamp(34px, 5vw, 64px); line-height: 1.08; letter-spacing: -.045em; max-width: 950px; }
+  .lead { font-size: clamp(18px, 2vw, 22px); color: var(--muted); max-width: 850px; margin-block: 24px 28px; }
+  .service-page__grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 64px; margin-block: 64px; align-items: start; }
+  h2 { font-size: 25px; line-height: 1.25; margin-bottom: 18px; }
+  article h2:not(:first-child) { margin-top: 38px; }
+  article p, article li { color: var(--muted); line-height: 1.75; }
+  article ul { list-style: disc; padding-left: 22px; }
+  article li + li { margin-top: 10px; }
+  aside { padding: 28px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper-2); }
+  aside p { color: var(--muted); }
+  address { font-style: normal; margin-block: 20px; line-height: 1.8; }
+  aside h2:not(:first-child) { margin-top: 32px; }
+  aside li + li { margin-top: 16px; }
+  a { text-underline-offset: 4px; }
+  @media(max-width: 800px) { .service-page__grid { grid-template-columns: 1fr; gap: 36px; } .breadcrumbs { margin-bottom: 36px; } }
+</style>

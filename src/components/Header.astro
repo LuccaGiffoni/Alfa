@@ -1,7 +1,7 @@
 ---
 import Button from './Button.astro';
 import Logo from './Logo.astro';
-import { nav, site } from '../data/site';
+import { asset, nav, site } from '../data/site';
 ---
 
 <header class="header" data-header>
@@ -12,7 +12,7 @@ import { nav, site } from '../data/site';
       <ul class="nav__list">
         {nav.map((item) => (
           <li>
-            <a class="nav__link" href={item.href}>{item.label}</a>
+            <a class="nav__link" href={asset(item.href)}>{item.label}</a>
           </li>
         ))}
       </ul>
