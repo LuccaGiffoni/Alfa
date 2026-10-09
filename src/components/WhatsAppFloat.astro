@@ -1,0 +1,67 @@
+---
+import { wa } from '../data/site';
+---
+
+<div class="wa-float">
+  <div class="wa-bubble" id="wa-bubble" hidden>
+    <button class="wa-bubble-close" type="button" aria-label="Fechar">×</button>
+    <strong>Fale com um contador 👋</strong>
+    <span>Tire suas dúvidas agora pelo WhatsApp.</span>
+  </div>
+  <a class="wa-btn" {...wa()} aria-label="Conversar com a Alfa Contabilidade no WhatsApp">
+    <svg aria-hidden="true"><use href="#i-wa" /></svg>
+  </a>
+</div>
+
+<script>
+  // Balão de convite: aparece depois de alguns segundos, até a pessoa fechar (vale para a sessão).
+  const bubble = document.getElementById('wa-bubble')!;
+  let closed = false;
+  try {
+    closed = sessionStorage.getItem('alfa-wa-bubble') === '1';
+  } catch {
+    // sem storage
+  }
+  if (!closed) {
+    setTimeout(() => (bubble.hidden = false), 6000);
+    bubble.querySelector('.wa-bubble-close')!.addEventListener('click', () => {
+      bubble.hidden = true;
+      try {
+        sessionStorage.setItem('alfa-wa-bubble', '1');
+      } catch {
+        // sem storage
+      }
+    });
+  }
+</script>
+
+<style>
+  .wa-float { position: fixed; right: 22px; bottom: 22px; z-index: 150; display: flex; align-items: flex-end; gap: 12px; }
+  .wa-btn {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--wa); color: #fff; display: grid; place-items: center;
+    box-shadow: 0 14px 30px -8px rgba(37, 211, 102, .65); position: relative; transition: transform .35s var(--ease), background .25s;
+  }
+  .wa-btn svg { width: 34px; height: 34px; }
+  .wa-btn::before, .wa-btn::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--wa); animation: waPulse 2.4s var(--ease) infinite; }
+  .wa-btn::after { animation-delay: 1.2s; }
+  .wa-btn:hover { transform: scale(1.08) rotate(-6deg); background: var(--wa-dark); }
+  @keyframes waPulse { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(1.7); opacity: 0; } }
+
+  .wa-bubble {
+    position: relative; background: #fff; border-radius: 18px 18px 4px 18px; padding: 14px 36px 14px 18px; box-shadow: var(--shadow);
+    font-size: .88rem; line-height: 1.4; max-width: 240px; margin-bottom: 10px; animation: bubbleIn .5s var(--ease);
+    display: flex; flex-direction: column;
+  }
+  .wa-bubble[hidden] { display: none; }
+  .wa-bubble strong { color: var(--ink); }
+  .wa-bubble span { color: var(--muted); }
+  .wa-bubble-close { position: absolute; top: 6px; right: 8px; width: 24px; height: 24px; border: 0; background: transparent; color: var(--muted); font-size: 1.2rem; line-height: 1; border-radius: 50%; }
+  .wa-bubble-close:hover { background: var(--cream); }
+  @keyframes bubbleIn { from { opacity: 0; transform: translateY(10px) scale(.95); } }
+
+  @media (max-width: 600px) {
+    .wa-float { right: 16px; bottom: 16px; }
+    .wa-btn { width: 58px; height: 58px; }
+    .wa-bubble { display: none !important; }
+  }
+</style>

@@ -1,124 +1,118 @@
 ---
-import Button from './Button.astro';
-import SectionLabel from './SectionLabel.astro';
-import { site } from '../data/site';
+import Icon from './Icon.astro';
+import { site, wa } from '../data/site';
+
+const subjects = ['Abrir uma empresa', 'Trocar de contador', 'Organizar a rotina contábil', 'Folha de pagamento', 'Impostos e fiscal', 'Outro assunto'];
 ---
 
-<section class="cta" id="contato" aria-labelledby="cta-title">
-  <div class="container cta__inner">
-    <div class="cta__copy">
-      <SectionLabel tone="dark" dot="navy">Próximo passo</SectionLabel>
-      <h2 class="display" id="cta-title" style="--max-size: 68px">SUA EMPRESA PRECISA DE UMA CONVERSA MAIS PRÓXIMA?</h2>
-      <p>Conte o seu momento. A ALFA ouve, organiza e orienta os próximos passos com clareza.</p>
+<section class="section final" id="contato">
+  <div class="container final-card">
+    <div class="final-copy reveal">
+      <span class="kicker light">Próximo passo</span>
+      <h2 class="section-title">Sua empresa precisa de uma conversa <em class="serif">mais próxima?</em></h2>
+      <p>Conte o seu momento. A Alfa ouve, organiza e orienta os próximos passos com clareza.</p>
+      <div class="final-contacts">
+        <a {...wa()}><Icon name="wa" />{site.phone.display}</a>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
     </div>
-
-    <div class="cta__actions">
-      <Button href={site.whatsappUrl} variant="light" external>Falar com a ALFA</Button>
-      <p>Atendimento próximo, com escritório em {site.address.city}.</p>
-      <ul class="cta__contacts">
-        <li>
-          <span>WhatsApp</span>
-          <a href={site.whatsappUrl} target="_blank" rel="noopener">{site.phone.display}</a>
-        </li>
-        <li>
-          <span>E-mail</span>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-        </li>
-      </ul>
-    </div>
+    <form class="contact-form reveal" style="--d:100ms" novalidate data-contact>
+      <h3>Envie uma mensagem</h3>
+      <div class="field">
+        <input id="c-nome" name="nome" type="text" placeholder=" " autocomplete="name" required />
+        <label for="c-nome">Seu nome</label>
+      </div>
+      <div class="field">
+        <input id="c-empresa" name="empresa" type="text" placeholder=" " autocomplete="organization" />
+        <label for="c-empresa">Empresa (opcional)</label>
+      </div>
+      <div class="field">
+        <select id="c-assunto" name="assunto">
+          {subjects.map((subject) => <option>{subject}</option>)}
+        </select>
+        <label for="c-assunto" class="fixed">Assunto</label>
+      </div>
+      <div class="field">
+        <textarea id="c-msg" name="mensagem" rows="3" placeholder=" "></textarea>
+        <label for="c-msg">Conte um pouco (opcional)</label>
+      </div>
+      <button class="btn btn-wa btn-lg btn-block" type="submit"><Icon name="wa" /> Enviar pelo WhatsApp</button>
+      <p class="form-note">A mensagem abre no WhatsApp já preenchida — é só tocar em enviar.</p>
+    </form>
   </div>
 </section>
 
+<script>
+  import { waLink } from '../data/site';
+
+  // O formulário não envia nada ao servidor: monta a mensagem e abre o WhatsApp.
+  const form = document.querySelector<HTMLFormElement>('[data-contact]')!;
+  const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+  const nome = field('nome');
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const name = nome.value.trim();
+    if (!name) {
+      nome.closest('.field')!.classList.add('error');
+      nome.focus();
+      return;
+    }
+    const company = field('empresa').value.trim();
+    const text = [
+      `Olá! Meu nome é ${name}${company ? `, da empresa ${company}` : ''}.`,
+      `Assunto: ${field('assunto').value}.`,
+      field('mensagem').value.trim(),
+    ]
+      .filter(Boolean)
+      .join('\n');
+    window.open(waLink(text), '_blank', 'noopener');
+  });
+  nome.addEventListener('input', () => nome.closest('.field')!.classList.remove('error'));
+</script>
+
 <style>
-  .cta {
-    background: var(--red);
-    color: var(--white);
+  .final { background: var(--paper); padding-top: 40px; }
+  .final-card {
+    position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(32px, 5vw, 64px); align-items: center;
+    background: var(--navy); border-radius: 36px; padding: clamp(32px, 6vw, 72px); overflow: hidden; color: rgba(255, 255, 255, .8);
+  }
+  .final-card::before { content: ""; position: absolute; width: 600px; height: 600px; right: -200px; top: -260px; border-radius: 50%; background: radial-gradient(circle, rgba(167, 44, 36, .55), transparent 65%); }
+  .final-card::after {
+    content: ""; position: absolute; width: 360px; height: 520px; left: -60px; bottom: -200px; background: #fff; opacity: .04;
+    -webkit-mask: url("../assets/brand/logo-alfa.svg") center / contain no-repeat; mask: url("../assets/brand/logo-alfa.svg") center / contain no-repeat;
+  }
+  .final-copy, .contact-form { position: relative; z-index: 1; }
+  h2 { color: #fff; margin-bottom: 18px; }
+  h2 .serif { color: var(--rose); }
+  .final-copy p { font-size: 1.1rem; }
+  .final-contacts { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; }
+  .final-contacts a { display: inline-flex; align-items: center; gap: 10px; color: #fff; font-weight: 650; font-size: 1.1rem; width: fit-content; border-bottom: 1px solid rgba(255, 255, 255, .25); padding-bottom: 2px; transition: border-color .25s; word-break: break-all; }
+  .final-contacts a:hover { border-color: #fff; }
+
+  .contact-form { background: #fff; border-radius: 26px; padding: clamp(24px, 3.5vw, 36px); box-shadow: var(--shadow-lg); color: var(--text); }
+  .contact-form h3 { font-size: 1.35rem; margin-bottom: 18px; }
+  .field { position: relative; margin-bottom: 14px; }
+  .field input, .field textarea, .field select {
+    width: 100%; border: 1.5px solid var(--line); border-radius: 14px; background: var(--paper); padding: 24px 16px 10px; font: inherit; font-size: .98rem; color: var(--ink);
+    transition: border-color .25s, background .25s, box-shadow .25s; appearance: none; -webkit-appearance: none;
+  }
+  .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6' fill='none' stroke='%231f2a72' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; background-size: 18px; padding-right: 44px; cursor: pointer; }
+  .field textarea { resize: vertical; min-height: 96px; }
+  .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--navy); background-color: #fff; box-shadow: 0 0 0 4px var(--navy-50); }
+  .field label { position: absolute; left: 17px; top: 17px; font-size: .98rem; color: var(--muted); pointer-events: none; transition: all .2s var(--ease); }
+  .field input:focus + label, .field input:not(:placeholder-shown) + label,
+  .field textarea:focus + label, .field textarea:not(:placeholder-shown) + label, .field label.fixed {
+    top: 7px; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--navy);
+  }
+  .field.error input { border-color: var(--red); background: var(--red-50); }
+  .form-note { font-size: .8rem; color: var(--muted); text-align: center; margin: 12px 0 0; }
+
+  @media (max-width: 900px) {
+    .final-card { grid-template-columns: 1fr; }
   }
 
-  .cta__inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 48px;
-    min-height: 430px;
-    padding-block: 72px;
-  }
-
-  .cta__copy {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 28px;
-    max-width: 850px;
-  }
-
-  .cta__copy > p {
-    max-width: 640px;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 1.5;
-  }
-
-  .cta__actions {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    flex: 0 0 310px;
-  }
-
-  .cta__actions > p {
-    font-size: 13px;
-    line-height: 1.45;
-  }
-
-  .cta__contacts {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    margin-top: 8px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.4);
-  }
-
-  .cta__contacts li {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .cta__contacts span {
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.8;
-  }
-
-  .cta__contacts a {
-    font-size: 15px;
-    font-weight: 600;
-    text-decoration: none;
-    overflow-wrap: anywhere;
-  }
-
-  .cta__contacts a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  @media (max-width: 1024px) {
-    .cta__inner {
-      flex-direction: column;
-      align-items: flex-start;
-      min-height: 0;
-      padding-block: var(--section-y);
-    }
-
-    .cta__actions {
-      flex-basis: auto;
-      max-width: 360px;
-    }
+  @media (max-width: 600px) {
+    .final-card { border-radius: 26px; }
   }
 </style>

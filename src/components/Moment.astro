@@ -1,0 +1,100 @@
+---
+import Icon from './Icon.astro';
+import { wa } from '../data/site';
+
+// `icon` é o desenho interno de um SVG 24×24.
+const moments = [
+  {
+    title: 'Quero abrir uma empresa',
+    text: 'Entenda os próximos passos para tirar seu negócio do papel, com apoio na abertura e na organização inicial.',
+    message: 'Olá! Quero abrir uma empresa e gostaria de orientação da Alfa.',
+    icon: '<path d="M12 3v18M3 12h18"/>',
+  },
+  {
+    title: 'Quero trocar de contador',
+    text: 'Converse sobre sua rotina atual e veja como acompanhamos toda a transição para a Alfa, sem dor de cabeça.',
+    message: 'Olá! Estou pensando em trocar de contador e quero conhecer a Alfa.',
+    icon: '<path d="M4 8h13l-4-4M20 16H7l4 4"/>',
+  },
+  {
+    title: 'Preciso organizar minha rotina',
+    text: 'Conte suas dúvidas sobre contabilidade, impostos ou folha. Vamos entender o que sua empresa precisa.',
+    message: 'Olá! Preciso de apoio para organizar a rotina contábil da minha empresa.',
+    icon: '<path d="M4 6h16M4 12h10M4 18h6"/>',
+  },
+  {
+    title: 'Sou MEI e estou crescendo',
+    text: 'Faturamento subindo ou contratando? Orientamos a hora certa e o caminho para deixar de ser MEI.',
+    message: 'Olá! Sou MEI, minha empresa está crescendo e quero entender os próximos passos.',
+    icon: '<path d="M4 18 10 12l4 4 6-8M15 8h5v5"/>',
+  },
+];
+---
+
+<section class="section moment" id="momento">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Seu próximo passo</span>
+      <h2 class="section-title">Em que momento está <em class="serif">sua empresa?</em></h2>
+      <p>Escolha o seu cenário e fale direto com a gente — a mensagem já vai pronta.</p>
+    </div>
+    <div class="moment-grid">
+      {moments.map((moment, i) => (
+        <a class="moment-card reveal" style={`--d:${i * 80}ms`} {...wa(moment.message)}>
+          <span class="moment-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <span class="moment-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={moment.icon} />
+          </span>
+          <h3>{moment.title}</h3>
+          <p>{moment.text}</p>
+          <span class="moment-cta">Conversar com a Alfa <Icon name="arrow" /></span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Luz que acompanha o ponteiro dentro de cada cartão
+  document.querySelectorAll<HTMLElement>('.moment-card').forEach((card) => {
+    card.addEventListener('pointermove', (event) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${event.clientX - r.left}px`);
+      card.style.setProperty('--my', `${event.clientY - r.top}px`);
+    });
+  });
+</script>
+
+<style>
+  .moment-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .moment-card {
+    position: relative; display: flex; flex-direction: column; padding: 28px 26px 26px; border-radius: var(--radius);
+    background: #fff; border: 1px solid var(--line); overflow: hidden; min-height: 330px;
+    transition: transform .5s var(--ease), box-shadow .5s var(--ease), border-color .3s;
+  }
+  .moment-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); border-color: transparent; }
+  .moment-card::before {
+    content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity .4s; pointer-events: none;
+    background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(31, 42, 114, .09), transparent 60%);
+  }
+  .moment-card:hover::before { opacity: 1; }
+  .moment-num { position: absolute; top: 22px; right: 24px; font-family: var(--serif); font-style: italic; font-size: 2.6rem; line-height: 1; color: var(--line); transition: color .4s; }
+  .moment-card:hover .moment-num { color: var(--red); }
+  .moment-icon { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: var(--navy-50); color: var(--navy); margin-bottom: 26px; transition: background .4s, color .4s, transform .5s var(--ease); }
+  .moment-icon svg { width: 24px; height: 24px; }
+  .moment-card:hover .moment-icon { background: var(--navy); color: #fff; transform: rotate(-8deg) scale(1.05); }
+  h3 { font-size: 1.25rem; margin-bottom: 10px; }
+  .moment-card p { font-size: .95rem; color: var(--muted); flex: 1; }
+  .moment-cta { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: .9rem; color: var(--red); }
+  .moment-cta .ico { transition: transform .35s var(--ease); }
+  .moment-card:hover .moment-cta .ico { transform: translate(3px, -3px); }
+
+  @media (max-width: 1080px) {
+    .moment-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 600px) {
+    .moment-grid { grid-template-columns: 1fr; }
+    .moment-card { min-height: 0; }
+  }
+</style>

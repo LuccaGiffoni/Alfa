@@ -1,0 +1,39 @@
+---
+import { site, yearsActive } from '../data/site';
+import { serviceAreas } from '../data/services';
+
+const stats = [
+  { value: yearsActive, suffix: '+', label: 'anos de atuação' },
+  { value: site.foundingYear, from: 1940, label: `ano de fundação em ${site.address.city}` },
+  { value: serviceAreas.length, label: 'frentes de atendimento' },
+  { value: 100, suffix: '%', label: 'atendimento humano' },
+];
+---
+
+<section class="stats" aria-label="A Alfa em números">
+  <div class="container stats-grid">
+    {stats.map((stat, i) => (
+      <div class="stat reveal" style={`--d:${i * 80}ms`}>
+        <span class="stat-num"><span data-count={stat.value} data-from={stat.from}>{stat.value}</span>{stat.suffix}</span>
+        <span class="stat-label">{stat.label}</span>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .stats { background: var(--navy); color: #fff; padding: clamp(50px, 7vw, 80px) 0; position: relative; overflow: hidden; }
+  .stats::before { content: ""; position: absolute; inset: 0; background: radial-gradient(600px 300px at 85% 0%, rgba(167, 44, 36, .35), transparent 70%), radial-gradient(500px 300px at 0% 100%, rgba(108, 124, 230, .35), transparent 70%); }
+  .stats-grid { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .stat { text-align: left; padding-left: 22px; border-left: 1px solid rgba(255, 255, 255, .18); }
+  .stat-num { display: block; font-size: clamp(2.6rem, 5vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat-label { display: block; margin-top: 10px; font-size: .92rem; color: rgba(255, 255, 255, .7); }
+
+  @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); row-gap: 36px; }
+  }
+
+  @media (max-width: 600px) {
+    .stat { padding-left: 14px; }
+  }
+</style>

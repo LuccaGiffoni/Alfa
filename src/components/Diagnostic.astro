@@ -1,0 +1,266 @@
+---
+import Icon from './Icon.astro';
+import { wa } from '../data/site';
+
+// `value` vai na mensagem do WhatsApp; `label` (quando houver) é o texto da opção.
+const questions = [
+  {
+    key: 'momento',
+    legend: 'Qual é o momento da sua empresa?',
+    options: [
+      { value: 'Quero abrir uma empresa', label: '🚀 Quero abrir uma empresa' },
+      { value: 'Quero trocar de contador', label: '🔄 Quero trocar de contador' },
+      { value: 'Preciso organizar a rotina', label: '🗂️ Preciso organizar a rotina' },
+      { value: 'Sou MEI e estou crescendo', label: '📈 Sou MEI e estou crescendo' },
+    ],
+  },
+  {
+    key: 'tipo',
+    legend: 'Como a empresa está hoje?',
+    options: [
+      { value: 'Ainda não tenho CNPJ' },
+      { value: 'MEI' },
+      { value: 'Simples Nacional' },
+      { value: 'Lucro Presumido ou Real', label: 'Lucro Presumido / Real' },
+      { value: 'Não sei informar' },
+    ],
+  },
+  {
+    key: 'equipe',
+    legend: 'Quantos funcionários a empresa tem?',
+    options: [{ value: 'Nenhum' }, { value: '1 a 5' }, { value: '6 a 20' }, { value: 'Mais de 20' }],
+  },
+  {
+    key: 'ajuda',
+    legend: 'Onde você mais precisa de ajuda?',
+    hint: '(pode marcar várias)',
+    multiple: true,
+    options: [
+      { value: 'Impostos e notas fiscais' },
+      { value: 'Folha de pagamento' },
+      { value: 'Abertura ou alteração de empresa', label: 'Abrir / alterar empresa' },
+      { value: 'Organizar a contabilidade' },
+      { value: 'Regularizar pendências' },
+      { value: 'Entender os números da empresa', label: 'Entender os números' },
+    ],
+  },
+];
+---
+
+<section class="section diag" id="diagnostico">
+  <div class="container diag-grid">
+    <div class="diag-intro reveal">
+      <span class="kicker light">Diagnóstico gratuito</span>
+      <h2 class="section-title">Descubra o que sua empresa precisa <em class="serif">em 30 segundos.</em></h2>
+      <p>Responda {questions.length} perguntas rápidas. No final, você recebe um resumo do seu cenário e envia para um contador da Alfa com um clique.</p>
+      <ul class="diag-perks">
+        <li><Icon name="check" />Sem cadastro</li>
+        <li><Icon name="check" />Sem compromisso</li>
+        <li><Icon name="check" />Resposta de uma pessoa real</li>
+      </ul>
+    </div>
+
+    <div class="quiz reveal" style="--d:100ms" aria-live="polite" data-quiz>
+      <div class="quiz-top">
+        <span class="quiz-step-label">
+          <span data-step>Pergunta <b data-current>1</b> de {questions.length}</span>
+          <span data-done hidden><b>Pronto!</b> Seu resumo</span>
+        </span>
+        <div class="quiz-bar"><span data-bar></span></div>
+      </div>
+
+      <form novalidate>
+        {questions.map((question, i) => (
+          <fieldset class:list={['q', { active: i === 0 }]}>
+            <legend>{question.legend} {question.hint && <small>{question.hint}</small>}</legend>
+            <div class="opts">
+              {question.options.map((option) => (
+                <label>
+                  <input type={question.multiple ? 'checkbox' : 'radio'} name={question.key} value={option.value} />
+                  <span>{option.label ?? option.value}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))}
+
+        <div class="q result">
+          <span class="result-badge">Seu diagnóstico</span>
+          <h3 data-result-title>Recomendação</h3>
+          <p data-result-text></p>
+          <div class="r-services" data-result-services></div>
+          <label class="r-msg-label" for="r-msg">Mensagem que será enviada (pode editar):</label>
+          <textarea id="r-msg" rows="7"></textarea>
+          <a class="btn btn-wa btn-lg" data-result-send {...wa()}><Icon name="wa" /> Enviar para a Alfa no WhatsApp</a>
+        </div>
+
+        <div class="quiz-nav">
+          <button type="button" class="btn btn-ghost-light" data-back disabled>Voltar</button>
+          <button type="button" class="btn btn-light" data-next disabled><span>Continuar</span> <Icon name="arrow" /></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { waLink } from '../data/site';
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wrap = document.querySelector<HTMLElement>('[data-quiz]')!;
+  const form = wrap.querySelector('form')!;
+  const steps = [...form.querySelectorAll<HTMLElement>('.q')];
+  const total = steps.length - 1; // o último passo é o resultado
+  const next = wrap.querySelector<HTMLButtonElement>('[data-next]')!;
+  const nextLabel = next.querySelector('span')!;
+  const back = wrap.querySelector<HTMLButtonElement>('[data-back]')!;
+  const stepLabel = wrap.querySelector<HTMLElement>('[data-step]')!;
+  const doneLabel = wrap.querySelector<HTMLElement>('[data-done]')!;
+  const current = wrap.querySelector<HTMLElement>('[data-current]')!;
+  const bar = wrap.querySelector<HTMLElement>('[data-bar]')!;
+  const message = wrap.querySelector<HTMLTextAreaElement>('#r-msg')!;
+  const send = wrap.querySelector<HTMLAnchorElement>('[data-result-send]')!;
+  let idx = 0;
+
+  const answered = (step: HTMLElement) => !!step.querySelector('input:checked');
+  const values = (name: string) =>
+    [...form.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`)].map((input) => input.value);
+
+  // Título, texto e serviços sugeridos para cada momento
+  const plans: Record<string, [string, string, string[]]> = {
+    'Quero abrir uma empresa': ['Abertura de empresa', 'Seu negócio começa organizado: escolhemos juntos o melhor enquadramento, cuidamos da abertura e deixamos a rotina inicial pronta.', ['Societário', 'Fiscal e tributário', 'Contabilidade']],
+    'Quero trocar de contador': ['Troca de contador sem dor de cabeça', 'A gente entende sua rotina atual, cuida da passagem de documentos com o escritório anterior e assume o acompanhamento com proximidade.', ['Contabilidade', 'Fiscal e tributário', 'Orientação próxima']],
+    'Preciso organizar a rotina': ['Rotina contábil organizada', 'Vamos colocar a casa em ordem: organizar documentos, revisar impostos e deixar claro o que precisa ser feito todo mês.', ['Contabilidade', 'Obrigações acessórias', 'Orientação próxima']],
+    'Sou MEI e estou crescendo': ['Crescimento com segurança', 'Avaliamos se é hora de deixar o MEI, qual o melhor enquadramento para o novo porte e como fazer a transição do jeito certo.', ['Societário', 'Fiscal e tributário']],
+  };
+  const fallbackPlan: [string, string, string[]] = ['Atendimento sob medida', 'Vamos entender seu cenário e indicar o acompanhamento ideal.', ['Orientação próxima']];
+
+  // Serviço ligado a cada resposta de "Onde você mais precisa de ajuda?"
+  const helpToService: Record<string, string> = {
+    'Impostos e notas fiscais': 'Fiscal e tributário',
+    'Folha de pagamento': 'Trabalhista',
+    'Abertura ou alteração de empresa': 'Societário',
+    'Organizar a contabilidade': 'Contabilidade',
+    'Regularizar pendências': 'Obrigações acessórias',
+    'Entender os números da empresa': 'Orientação próxima',
+  };
+
+  const buildResult = () => {
+    const momento = values('momento')[0] ?? '';
+    const tipo = values('tipo')[0] ?? '';
+    const equipe = values('equipe')[0] ?? '';
+    const ajuda = values('ajuda');
+
+    const [title, text, planServices] = plans[momento] ?? fallbackPlan;
+    const services = new Set(planServices);
+    if (equipe && equipe !== 'Nenhum') services.add('Trabalhista');
+    ajuda.forEach((item) => helpToService[item] && services.add(helpToService[item]));
+
+    wrap.querySelector('[data-result-title]')!.textContent = title;
+    wrap.querySelector('[data-result-text]')!.textContent = text;
+    wrap.querySelector('[data-result-services]')!.replaceChildren(
+      ...[...services].map((service) => Object.assign(document.createElement('span'), { textContent: service })),
+    );
+
+    message.value = [
+      'Olá! Fiz o diagnóstico no site da Alfa Contabilidade.',
+      `• Momento: ${momento}`,
+      `• Situação da empresa: ${tipo}`,
+      `• Funcionários: ${equipe}`,
+      ...(ajuda.length ? [`• Preciso de ajuda com: ${ajuda.join(', ')}`] : []),
+      '',
+      'Gostaria de conversar com um contador.',
+    ].join('\n');
+    send.href = waLink(message.value);
+  };
+
+  const render = () => {
+    const done = idx === total;
+    steps.forEach((step, i) => step.classList.toggle('active', i === idx));
+    wrap.classList.toggle('done', done);
+    stepLabel.hidden = done;
+    doneLabel.hidden = !done;
+    current.textContent = String(idx + 1);
+    bar.style.width = `${((idx + (done ? 0 : 1)) / total) * 100}%`;
+    back.disabled = idx === 0;
+    next.disabled = !done && !answered(steps[idx]);
+    nextLabel.textContent = idx === total - 1 ? 'Ver meu diagnóstico' : 'Continuar';
+    if (done) buildResult();
+  };
+
+  const go = (to: number) => {
+    idx = Math.max(0, Math.min(total, to));
+    render();
+    const top = wrap.getBoundingClientRect().top;
+    if (top < 0 || top > window.innerHeight * 0.5) wrap.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  };
+
+  form.addEventListener('change', (event) => {
+    next.disabled = !answered(steps[idx]);
+    // avança sozinho nas perguntas de escolha única
+    if ((event.target as HTMLInputElement).type === 'radio' && idx < total - 1) setTimeout(() => go(idx + 1), 320);
+  });
+  next.addEventListener('click', () => go(idx + 1));
+  back.addEventListener('click', () => go(idx - 1));
+  message.addEventListener('input', () => (send.href = waLink(message.value)));
+
+  render();
+</script>
+
+<style>
+  .diag { background: var(--navy-900); color: rgba(255, 255, 255, .78); overflow: hidden; }
+  .diag::before { content: ""; position: absolute; inset: 0; background: radial-gradient(700px 500px at 100% 0%, rgba(167, 44, 36, .35), transparent 60%), radial-gradient(600px 500px at 0% 100%, rgba(76, 91, 196, .4), transparent 60%); pointer-events: none; }
+  .diag-grid { position: relative; display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(40px, 6vw, 80px); align-items: center; }
+  h2 { color: #fff; margin-bottom: 20px; }
+  h2 .serif { color: var(--rose); }
+  .diag-intro p { font-size: 1.08rem; }
+  .diag-perks { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 12px; }
+  .diag-perks li { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 600; }
+  .diag-perks .ico { color: var(--navy-900); background: var(--rose); border-radius: 50%; padding: 3px; width: 22px; height: 22px; }
+
+  .quiz { background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .12); border-radius: 28px; padding: clamp(24px, 4vw, 40px); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .quiz-top { display: flex; align-items: center; gap: 18px; margin-bottom: 26px; }
+  .quiz-step-label { font-size: .82rem; font-weight: 600; white-space: nowrap; }
+  .quiz-step-label b { color: #fff; }
+  .quiz-bar { flex: 1; height: 6px; background: rgba(255, 255, 255, .12); border-radius: 6px; overflow: hidden; }
+  .quiz-bar span { display: block; height: 100%; width: 25%; background: linear-gradient(90deg, var(--rose), var(--red)); border-radius: inherit; transition: width .6s var(--ease); }
+  .q { border: 0; padding: 0; margin: 0; display: none; min-width: 0; }
+  .q.active { display: block; animation: panelIn .5s var(--ease); }
+  legend { color: #fff; font-size: clamp(1.3rem, 2.4vw, 1.65rem); font-weight: 700; letter-spacing: -.02em; margin-bottom: 20px; padding: 0; line-height: 1.25; }
+  legend small { font-size: .62em; font-weight: 500; color: rgba(255, 255, 255, .6); letter-spacing: 0; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opts label { position: relative; cursor: pointer; }
+  .opts input { position: absolute; opacity: 0; pointer-events: none; }
+  .opts span {
+    display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 14px 18px 14px 48px; border-radius: 16px;
+    background: rgba(255, 255, 255, .05); border: 1.5px solid rgba(255, 255, 255, .14); color: #fff; font-weight: 600; font-size: .95rem; line-height: 1.3;
+    transition: background .25s, border-color .25s, transform .25s var(--ease);
+  }
+  .opts span::before { content: ""; position: absolute; left: 17px; width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .4); transition: all .25s; }
+  .opts input[type="checkbox"] + span::before { border-radius: 6px; }
+  .opts label:hover span { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .3); }
+  .opts input:checked + span { background: #fff; border-color: #fff; color: var(--navy-900); transform: scale(1.015); }
+  .opts input:checked + span::before { border-color: var(--red); background: var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 12.5 4 4L18 8' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 13px no-repeat; }
+  .opts input:focus-visible + span { outline: 3px solid var(--rose); outline-offset: 2px; }
+  .quiz-nav { display: flex; justify-content: space-between; margin-top: 28px; gap: 12px; }
+  .quiz.done [data-next] { display: none; }
+
+  .result { color: rgba(255, 255, 255, .85); }
+  .result-badge { display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; background: var(--red); color: #fff; padding: 6px 12px; border-radius: 999px; margin-bottom: 14px; }
+  .result h3 { color: #fff; font-size: clamp(1.4rem, 2.6vw, 1.9rem); margin-bottom: 10px; }
+  .r-services { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 22px; }
+  .r-services :global(span) { padding: 7px 14px; border-radius: 999px; background: rgba(255, 180, 173, .15); border: 1px solid rgba(255, 180, 173, .35); color: #ffd9d5; font-size: .85rem; font-weight: 600; }
+  .r-msg-label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 8px; color: rgba(255, 255, 255, .6); }
+  .result textarea { width: 100%; border-radius: 14px; border: 1px solid rgba(255, 255, 255, .18); background: rgba(0, 0, 0, .2); color: #fff; padding: 14px 16px; font: inherit; font-size: .9rem; line-height: 1.5; resize: vertical; margin-bottom: 18px; }
+  .result textarea:focus { outline: 2px solid var(--rose); }
+  .result .btn { width: 100%; }
+
+  @media (max-width: 900px) {
+    .diag-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .opts { grid-template-columns: 1fr; }
+    .quiz-nav .btn { flex: 1; }
+  }
+</style>

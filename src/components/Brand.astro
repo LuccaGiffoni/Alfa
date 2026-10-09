@@ -1,0 +1,23 @@
+---
+interface Props {
+  href: string;
+  tone?: 'dark' | 'light';
+}
+const { href, tone = 'dark' } = Astro.props;
+---
+
+<a class:list={['brand', { light: tone === 'light' }]} href={href} aria-label="ALFA Contabilidade — início">
+  <svg class="brand-mark" aria-hidden="true"><use href="#logo-a" /></svg>
+  <span class="brand-text"><strong>ALFA</strong><small>Contabilidade</small></span>
+</a>
+
+<style>
+  .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--navy); }
+  .brand-mark { width: 26px; height: 38px; color: var(--navy); --logo-dot: var(--red); transition: transform .5s var(--ease); }
+  .brand:hover .brand-mark { transform: rotate(-8deg) scale(1.06); }
+  .brand-text { display: flex; flex-direction: column; line-height: 1; }
+  .brand-text strong { font-size: 1.3rem; letter-spacing: .02em; color: var(--ink); font-weight: 800; }
+  .brand-text small { font-size: .66rem; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); margin-top: 4px; font-weight: 600; }
+  .brand.light .brand-mark, .brand.light .brand-text strong { color: #fff; }
+  .brand.light .brand-text small { color: rgba(255, 255, 255, .6); }
+</style>

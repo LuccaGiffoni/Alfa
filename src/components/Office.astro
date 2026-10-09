@@ -1,173 +1,69 @@
 ---
-import SectionLabel from './SectionLabel.astro';
-import TextLink from './TextLink.astro';
-import { site } from '../data/site';
+import Icon from './Icon.astro';
+import { site, wa } from '../data/site';
 ---
 
-<section class="office" id="escritorio" aria-labelledby="office-title">
-  <div class="office__grid">
-    <figure class="office__visual">
-      <iframe
-        src={site.mapsEmbedUrl}
-        title={`Localização da Alfa Contabilidade: ${site.address.street}, ${site.address.city} — ${site.address.state}`}
-        width="720" height="650" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
-      ></iframe>
-      <figcaption class="sr-only">Google Maps: {site.address.street}, {site.address.city} — {site.address.state}.</figcaption>
-    </figure>
-
-    <div class="office__copy">
-      <SectionLabel number="06">Onde estamos</SectionLabel>
-
-      <div class="office__address">
-        <h2 class="display" id="office-title" style="--max-size: 58px">NOSSO ESCRITÓRIO EM JACAREÍ.</h2>
-        <span class="office__rule" aria-hidden="true"></span>
-        <address>
-          <a class="office__street" href={site.mapsUrl} target="_blank" rel="noopener">{site.address.street}</a>
-          <span class="office__city">{site.address.city} — {site.address.state}</span>
-        </address>
-      </div>
-
-      <div class="office__footer">
-        <p>Um espaço para sentar, conversar com calma e entender o que sua empresa precisa.</p>
-        <div class="office__links">
-          <TextLink href={site.whatsappUrl} external>Falar com a equipe</TextLink>
-          <TextLink href={site.mapsUrl} external>Como chegar</TextLink>
+<section class="section office" id="escritorio">
+  <div class="container office-grid">
+    <div class="office-copy reveal">
+      <span class="kicker">05 · Onde estamos</span>
+      <h2 class="section-title">Nosso escritório <em class="serif">em {site.address.city}.</em></h2>
+      <p>Um espaço para sentar, conversar com calma e entender o que sua empresa precisa.</p>
+      <div class="office-info">
+        <div>
+          <span class="label">Endereço</span>
+          <strong>{site.address.street}</strong>
+          <span>{site.address.city} — {site.address.state}</span>
+        </div>
+        <div>
+          <span class="label">WhatsApp</span>
+          <a {...wa()}><strong>{site.phone.display}</strong></a>
+        </div>
+        <div>
+          <span class="label">E-mail</span>
+          <a href={`mailto:${site.email}`}><strong>{site.email}</strong></a>
         </div>
       </div>
+      <div class="office-actions">
+        <a class="btn btn-primary" href={site.mapsUrl} target="_blank" rel="noopener">Como chegar <Icon name="arrow" /></a>
+        <a class="btn btn-ghost" {...wa('Olá! Gostaria de agendar uma visita ao escritório da Alfa.')}>Agendar visita</a>
+      </div>
+    </div>
+    <div class="map reveal" style="--d:100ms">
+      <iframe
+        src={site.mapsEmbedUrl}
+        title={`Mapa do escritório da Alfa Contabilidade: ${site.address.street}, ${site.address.city} — ${site.address.state}`}
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+      ></iframe>
+      <div class="map-pin" aria-hidden="true"><svg><use href="#logo-a" /></svg> Alfa Contabilidade</div>
     </div>
   </div>
 </section>
 
 <style>
-  .office {
-    background: var(--paper);
+  .office { background: var(--paper); }
+  .office-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(40px, 6vw, 80px); align-items: center; }
+  h2 { margin-bottom: 18px; }
+  .office-copy > p { font-size: 1.08rem; color: var(--muted); }
+  .office-info { display: grid; gap: 4px; margin: 28px 0; border-top: 1px solid var(--line); }
+  .office-info > div { display: grid; grid-template-columns: 110px 1fr; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); gap: 4px 12px; }
+  .office-info .label { font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); grid-row: span 2; }
+  .office-info strong { color: var(--ink); font-weight: 650; word-break: break-word; }
+  .office-info a:hover strong { color: var(--red); }
+  .office-info span:not(.label) { font-size: .95rem; grid-column: 2; }
+  .office-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .map { position: relative; border-radius: 28px; overflow: hidden; box-shadow: var(--shadow-lg); aspect-ratio: 5 / 4; background: var(--cream); }
+  .map iframe { width: 100%; height: 100%; border: 0; filter: saturate(.75) contrast(1.05); }
+  .map-pin { position: absolute; left: 14px; bottom: 34px; pointer-events: none; display: inline-flex; align-items: center; gap: 8px; background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 999px; font-weight: 700; font-size: .85rem; box-shadow: var(--shadow); }
+  .map-pin svg { width: 12px; height: 18px; color: #fff; --logo-dot: var(--rose); }
+
+  @media (max-width: 900px) {
+    .office-grid { grid-template-columns: 1fr; }
   }
 
-  .office__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: var(--max);
-    min-height: 650px;
-    margin-inline: auto;
-  }
-
-  .office__visual {
-    position: relative;
-    overflow: hidden;
-    background: var(--line);
-  }
-
-  .office__visual iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-
-  .office__tag {
-    position: absolute;
-    top: 30px;
-    left: 30px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    background: var(--white);
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .office__tag :global(svg) {
-    color: var(--terracotta);
-  }
-
-  .office__copy {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 48px;
-    padding: 76px var(--gutter) 70px 64px;
-  }
-
-  .office__address {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-  }
-
-  .office__rule {
-    width: 96px;
-    height: 4px;
-    background: var(--red);
-  }
-
-  address {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-style: normal;
-  }
-
-  .office__street {
-    font-size: clamp(22px, calc(0.8vw + 14px), 26px);
-    line-height: 1.35;
-    text-decoration: none;
-    text-underline-offset: 6px;
-    text-decoration-thickness: 2px;
-  }
-
-  .office__street:hover {
-    text-decoration-line: underline;
-    text-decoration-color: var(--red);
-  }
-
-  .office__city {
-    color: var(--muted);
-    font-size: 17px;
-  }
-
-  .office__footer {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .office__footer p {
-    color: var(--muted);
-    font-size: 16px;
-    line-height: 1.55;
-  }
-
-  .office__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px 32px;
-  }
-
-  @media (max-width: 960px) {
-    .office__grid {
-      grid-template-columns: 1fr;
-      min-height: 0;
-    }
-
-    .office__visual {
-      aspect-ratio: 4 / 3;
-    }
-
-    .office__copy {
-      padding: 56px var(--gutter) var(--section-y);
-    }
-  }
-
-  @media (max-width: 560px) {
-    .office__tag {
-      top: 16px;
-      left: 16px;
-    }
+  @media (max-width: 600px) {
+    .office-info > div { grid-template-columns: 1fr; }
+    .office-info .label { grid-row: auto; }
+    .office-info span:not(.label) { grid-column: 1; }
   }
 </style>

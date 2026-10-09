@@ -1,184 +1,83 @@
 ---
 import { Image } from 'astro:assets';
-import SectionLabel from './SectionLabel.astro';
-import TextLink from './TextLink.astro';
-import { photos } from '../data/site';
+import { photos } from '../data/photos';
+import { site } from '../data/site';
 
-const pillars = [
+const values = [
   { title: 'Escuta antes da resposta', text: 'Entender o contexto vem antes de orientar.' },
   { title: 'Clareza no caminho', text: 'Explicações diretas, sem complicar o que pode ser simples.' },
   { title: 'Presença de verdade', text: 'Acompanhamento próximo para não deixar dúvidas acumularem.' },
 ];
 ---
 
-<section class="about" id="a-alfa" aria-labelledby="about-title">
-  <div class="container about__inner">
-    <SectionLabel number="01">A empresa</SectionLabel>
-
-    <div class="about__grid">
-      <div class="about__main">
-        <h2 class="display" id="about-title">CONTABILIDADE COMEÇA COM UMA BOA CONVERSA.</h2>
-        <Image src={photos.about.src} alt={photos.about.alt} widths={[480, 800, 1200, 1536]} sizes="(max-width: 960px) 100vw, 50vw" quality={85} loading="lazy" />
+<section class="section about" id="a-alfa">
+  <div class="container about-grid">
+    <div class="about-media reveal">
+      <div class="about-img main">
+        <Image src={photos.about.src} alt={photos.about.alt} widths={[480, 800, 1200]} sizes="(max-width: 900px) 84vw, 460px" quality={85} loading="lazy" />
       </div>
-
-      <div class="about__side">
-        <p class="about__lead">
-          A ALFA Contabilidade atua desde 1981, em Jacareí, unindo experiência prática e atendimento que respeita o
-          ritmo de cada negócio. À frente da Alfa, Marcio Giffoni mantém o compromisso com uma relação próxima entre o escritório e cada cliente.
-        </p>
-        <span class="about__rule" aria-hidden="true"></span>
-        <p class="about__body">
-          Aqui, a relação não termina na entrega de obrigações. Nossa forma de trabalhar passa por ouvir, organizar
-          informações, explicar possibilidades e acompanhar decisões com responsabilidade. É uma contabilidade feita por
-          pessoas, para empresas conduzidas por pessoas.
-        </p>
-        <TextLink href="#nosso-jeito">Conheça nosso jeito de atender</TextLink>
+      <div class="about-img small">
+        <Image src={photos.aboutDetail.src} alt={photos.aboutDetail.alt} widths={[320, 640]} sizes="(max-width: 900px) 46vw, 260px" quality={85} loading="lazy" />
+      </div>
+      <div class="seal" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <defs><path id="seal-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" /></defs>
+          <text textLength="482" lengthAdjust="spacing"><textPath href="#seal-circle" textLength="482" lengthAdjust="spacing">ALFA CONTABILIDADE • {site.address.city.toUpperCase()} • DESDE {site.foundingYear} •</textPath></text>
+        </svg>
+        <span>{site.foundingYear}</span>
       </div>
     </div>
-
-    <ul class="pillars">
-      {pillars.map((pillar) => (
-        <li class="pillar">
-          <span class="pillar__dot" aria-hidden="true"></span>
-          <div class="pillar__body">
-            <h3>{pillar.title}</h3>
-            <p>{pillar.text}</p>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <div class="about-copy">
+      <span class="kicker reveal">01 · A empresa</span>
+      <h2 class="section-title reveal">Contabilidade começa com <em class="serif">uma boa conversa.</em></h2>
+      <p class="reveal">A <strong>ALFA Contabilidade</strong> atua desde {site.foundingYear}, em {site.address.city}, unindo experiência prática e um atendimento que respeita o ritmo de cada negócio. À frente da Alfa, <strong>{site.founder}</strong> mantém o compromisso com uma relação próxima entre o escritório e cada cliente.</p>
+      <p class="reveal">Aqui, a relação não termina na entrega de obrigações. Nossa forma de trabalhar passa por ouvir, organizar informações, explicar possibilidades e acompanhar decisões com responsabilidade.</p>
+      <blockquote class="quote reveal">
+        “Uma contabilidade feita por pessoas, para empresas conduzidas por pessoas.”
+        <cite><span class="sig">{site.founder}</span> À frente da Alfa Contabilidade</cite>
+      </blockquote>
+      <ul class="values">
+        {values.map((value, i) => (
+          <li class="reveal" style={`--d:${i * 80}ms`}><strong>{value.title}</strong><span>{value.text}</span></li>
+        ))}
+      </ul>
+    </div>
   </div>
 </section>
 
 <style>
-  .about {
-    background: var(--paper-2);
-    padding-block: var(--section-y);
+  .about { background: #fff; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(40px, 7vw, 100px); align-items: center; }
+  .about-media { position: relative; padding: 0 0 70px 0; }
+  .about-img { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  .about-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+  .about-img:hover img { transform: scale(1.05); }
+  .about-img.main { aspect-ratio: 4 / 4.4; width: 84%; }
+  .about-img.small { position: absolute; width: 46%; aspect-ratio: 1; right: 0; bottom: 0; border: 8px solid #fff; border-radius: 28px; }
+  .seal { position: absolute; top: -26px; right: 4%; width: 140px; height: 140px; display: grid; place-items: center; background: var(--red); border-radius: 50%; color: #fff; box-shadow: var(--shadow); }
+  .seal svg { position: absolute; inset: 0; animation: spin 22s linear infinite; }
+  .seal text { fill: #fff; font-size: 14px; font-weight: 700; letter-spacing: 1px; font-family: var(--sans); }
+  .seal > span { font-family: var(--serif); font-size: 2rem; font-style: italic; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .about-copy p { font-size: 1.05rem; }
+  .about-copy h2 { margin-bottom: 26px; }
+  .quote { margin: 30px 0; padding: 24px 28px; border-left: 4px solid var(--red); background: var(--cream); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-family: var(--serif); font-size: 1.55rem; line-height: 1.3; color: var(--navy); font-style: italic; }
+  .quote cite { display: block; margin-top: 14px; font-family: var(--sans); font-style: normal; font-size: .82rem; color: var(--muted); font-weight: 500; }
+  .quote .sig { display: block; font-family: var(--serif); font-style: italic; font-size: 1.4rem; color: var(--ink); }
+  .values { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .values li { padding: 18px; border: 1px solid var(--line); border-radius: var(--radius-sm); transition: border-color .3s, transform .4s var(--ease); }
+  .values li:hover { border-color: var(--navy); transform: translateY(-4px); }
+  .values strong { display: block; color: var(--ink); font-size: .95rem; margin-bottom: 4px; }
+  .values span { font-size: .85rem; color: var(--muted); line-height: 1.5; display: block; }
+
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .about-media { max-width: 560px; }
+    .values { grid-template-columns: 1fr; }
   }
 
-  .about__inner {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 56px;
-  }
-
-  .about__grid {
-    display: grid;
-    grid-template-columns: minmax(0, 620fr) minmax(0, 612fr);
-    gap: 64px;
-    width: 100%;
-  }
-
-  .about__main {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  .about__main img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 620 / 320;
-    object-fit: cover;
-  }
-
-  .about__side {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 28px;
-    padding-top: 84px;
-  }
-
-  .about__lead {
-    font-size: clamp(20px, calc(1vw + 12px), 26px);
-    font-weight: 500;
-    line-height: 1.34;
-  }
-
-  .about__rule {
-    align-self: stretch;
-    height: 2px;
-    background: var(--ink);
-  }
-
-  .about__body {
-    color: var(--muted);
-    font-size: 17px;
-    line-height: 1.65;
-  }
-
-  .pillars {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    width: 100%;
-    border-block: 2px solid var(--ink);
-  }
-
-  .pillar {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 32px;
-    min-height: 172px;
-    padding: 30px 26px;
-  }
-
-  .pillar + .pillar {
-    border-left: 1px solid var(--ink);
-  }
-
-  .pillar__dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--red);
-  }
-
-  .pillar__body {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .pillar h3 {
-    font-size: 20px;
-    font-weight: 800;
-    line-height: 1.25;
-  }
-
-  .pillar p {
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.45;
-  }
-
-  @media (max-width: 960px) {
-    .about__grid {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-
-    .about__side {
-      padding-top: 0;
-    }
-  }
-
-  @media (max-width: 720px) {
-    .pillars {
-      grid-template-columns: 1fr;
-    }
-
-    .pillar {
-      min-height: 0;
-      padding: 26px 0;
-      gap: 20px;
-    }
-
-    .pillar + .pillar {
-      border-left: 0;
-      border-top: 1px solid var(--ink);
-    }
+  @media (max-width: 600px) {
+    .seal { width: 108px; height: 108px; top: -20px; }
   }
 </style>

@@ -1,3 +1,50 @@
+/** Frentes de atendimento das abas da home. `icon` é o desenho interno de um SVG 24×24. */
+export const serviceAreas = [
+  {
+    name: 'Contabilidade',
+    icon: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+    text: 'Organização, registros e acompanhamento da vida contábil da empresa — com relatórios que você realmente entende.',
+    items: ['Escrituração contábil completa', 'Balancetes, balanço patrimonial e DRE', 'Conciliações e organização de documentos', 'Números explicados em linguagem simples'],
+    message: 'Olá! Gostaria de conversar sobre contabilidade para minha empresa.',
+  },
+  {
+    name: 'Fiscal e tributário',
+    icon: '<path d="M19 5 5 19M7.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM16.5 18a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/>',
+    text: 'Apuração e orientação para uma rotina fiscal clara, em dia e bem conduzida — pagando o que é devido, sem surpresas.',
+    items: ['Apuração de impostos (Simples Nacional, Presumido e Real)', 'Guias e controle de vencimentos', 'Análise do enquadramento tributário', 'Orientação sobre emissão de notas fiscais'],
+    message: 'Olá! Gostaria de conversar sobre fiscal e tributário para minha empresa.',
+  },
+  {
+    name: 'Trabalhista',
+    icon: '<path d="M16 19v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM22 19v-1a4 4 0 0 0-3-3.87M16 4.13a3 3 0 0 1 0 5.75"/>',
+    text: 'Apoio completo nas rotinas de pessoal, para você cuidar da equipe sem se perder em prazos e encargos.',
+    items: ['Folha de pagamento e pró-labore', 'Admissões, férias, 13º e desligamentos', 'eSocial, FGTS e encargos', 'Orientação nas rotinas com colaboradores'],
+    message: 'Olá! Gostaria de conversar sobre folha de pagamento e trabalhista para minha empresa.',
+  },
+  {
+    name: 'Societário',
+    icon: '<path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/>',
+    text: 'Suporte em abertura, alterações e regularização de empresas — do primeiro CNPJ às mudanças do caminho.',
+    items: ['Abertura de empresas', 'Transição de MEI para ME', 'Alterações contratuais e de endereço', 'Regularização e encerramento'],
+    message: 'Olá! Gostaria de conversar sobre abertura ou alteração de empresa.',
+  },
+  {
+    name: 'Obrigações acessórias',
+    icon: '<path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2ZM9 16l2 2 4-4"/>',
+    text: 'Preparação e acompanhamento de todas as entregas ligadas à operação, para a empresa ficar regular e longe de multas.',
+    items: ['Declarações federais, estaduais e municipais', 'Calendário de entregas acompanhado', 'Emissão de certidões', 'Prevenção de multas e pendências'],
+    message: 'Olá! Gostaria de conversar sobre obrigações acessórias para minha empresa.',
+  },
+  {
+    name: 'Orientação próxima',
+    icon: '<path d="M21 12a8 8 0 0 1-11.8 7.05L4 20l1-4.6A8 8 0 1 1 21 12Z"/>',
+    text: 'Leitura do contexto e esclarecimento para apoiar as decisões do dia a dia — antes que virem problema.',
+    items: ['Conversas para apoiar decisões', 'Leitura dos números da empresa', 'Planejamento antes de mudanças importantes', 'Um contador que conhece sua história'],
+    message: 'Olá! Gostaria de uma orientação contábil para minha empresa.',
+  },
+] as const;
+
+/** Páginas próprias por serviço (/servicos/<slug>/), voltadas para busca local. */
 export const servicePages = [
   {
     slug: 'abertura-de-empresa-jacarei', name: 'Abertura de empresa',

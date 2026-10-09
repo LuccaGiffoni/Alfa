@@ -2,8 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import Button from '../../components/Button.astro';
-import { asset, site } from '../../data/site';
+import Icon from '../../components/Icon.astro';
+import { asset, site, wa } from '../../data/site';
 import { servicePages } from '../../data/services';
 export function getStaticPaths() {
   return servicePages.map(service => ({ params: { slug: service.slug }, props: { service } }));
@@ -15,51 +15,91 @@ const schema = { '@context': 'https://schema.org', '@graph': [
   { '@type': 'Service', '@id': `${url}#servico`, name: service.name, description: service.description, url, serviceType: service.name, areaServed: { '@type': 'City', name: 'Jacareí' }, provider: { '@id': `${root}#empresa` } },
   { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Início', item: root }, { '@type': 'ListItem', position: 2, name: service.name, item: url }] },
 ] };
+const message = `Olá! Gostaria de conversar sobre ${service.name.toLowerCase()} com a Alfa.`;
 ---
 <Base title={service.title} description={service.description}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   <Header />
-  <main id="conteudo" class="service-page container">
-    <nav class="breadcrumbs" aria-label="Caminho da página"><a href={asset('')}>Início</a><span aria-hidden="true"> / </span><span aria-current="page">{service.name}</span></nav>
-    <p class="eyebrow">ALFA CONTABILIDADE · DESDE 1981</p>
-    <h1>{service.name} em Jacareí</h1>
-    <p class="lead">{service.intro}</p>
-    <Button href={`https://wa.me/${site.phone.e164.replace('+', '')}?text=${encodeURIComponent(`Olá! Gostaria de conversar sobre ${service.name.toLowerCase()} com a Alfa.`)}`} variant="red" external>Conversar sobre este serviço</Button>
-    <div class="service-page__grid">
-      <article>
-        <h2>{service.heading}</h2><p>{service.body}</p>
-        <h2>Como a Alfa pode ajudar</h2><ul>{service.items.map(item => <li>{item}</li>)}</ul>
-        <h2>O que preparar para a primeira conversa</h2><p>{service.preparation}</p>
-        <h2>{service.question}</h2><p>{service.answer}</p>
-      </article>
-      <aside aria-label="Contato e outros serviços">
-        <h2>Vamos falar da sua empresa?</h2><p>Atendimento pessoal em {site.address.city}, São Paulo.</p>
-        <address>{site.address.street}<br />{site.address.city} — {site.address.state}<br /><a href={`tel:${site.phone.e164}`}>{site.phone.display}</a></address>
-        <a href={site.mapsUrl} target="_blank" rel="noopener">Como chegar ao escritório ↗</a>
-        <h2>Outras soluções</h2><ul>{servicePages.filter(item => item.slug !== service.slug).map(item => <li><a href={asset(`servicos/${item.slug}/`)}>{item.name}</a></li>)}</ul>
-      </aside>
-    </div>
-    <a href={asset('#servicos')}>← Ver serviços na página inicial</a>
+  <main id="conteudo">
+    <section class="sp-hero">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Caminho da página"><a href={asset('')}>Início</a><span aria-hidden="true"> / </span><span aria-current="page">{service.name}</span></nav>
+        <span class="kicker">Alfa Contabilidade · desde {site.foundingYear}</span>
+        <h1>{service.name} <em class="serif accent">em {site.address.city}.</em></h1>
+        <p class="lead">{service.intro}</p>
+        <div class="sp-actions">
+          <a class="btn btn-primary btn-lg" {...wa(message)}><Icon name="wa" /> Conversar sobre este serviço</a>
+          <a class="btn btn-ghost btn-lg" href={asset('#servicos')}>Ver todos os serviços <Icon name="arrow" /></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sp-body">
+      <div class="container sp-grid">
+        <article>
+          <h2>{service.heading}</h2><p>{service.body}</p>
+          <h2>Como a Alfa pode ajudar</h2><ul class="sp-list">{service.items.map(item => <li>{item}</li>)}</ul>
+          <h2>O que preparar para a primeira conversa</h2><p>{service.preparation}</p>
+          <h2>{service.question}</h2><p>{service.answer}</p>
+        </article>
+        <aside aria-label="Contato e outros serviços">
+          <div class="sp-card">
+            <h2>Vamos falar da sua empresa?</h2><p>Atendimento pessoal em {site.address.city}, São Paulo.</p>
+            <address>{site.address.street}<br />{site.address.city} — {site.address.state}<br /><a href={`tel:${site.phone.e164}`}>{site.phone.display}</a></address>
+            <a class="btn btn-wa btn-block" {...wa(message)}><Icon name="wa" /> Falar no WhatsApp</a>
+            <a class="sp-map" href={site.mapsUrl} target="_blank" rel="noopener">Como chegar ao escritório <Icon name="arrow" /></a>
+          </div>
+          <div class="sp-other">
+            <h2>Outras soluções</h2>
+            <ul>{servicePages.filter(item => item.slug !== service.slug).map(item => <li><a href={asset(`servicos/${item.slug}/`)}>{item.name} <Icon name="arrow" /></a></li>)}</ul>
+          </div>
+        </aside>
+      </div>
+    </section>
   </main>
   <Footer />
 </Base>
 <style>
-  .service-page { padding-block: 36px 80px; }
-  .breadcrumbs { font-size: 14px; color: var(--muted); margin-bottom: 56px; }
-  .eyebrow { color: var(--red); font-size: 12px; font-weight: 750; letter-spacing: .08em; margin-bottom: 16px; }
-  h1 { font-size: clamp(34px, 5vw, 64px); line-height: 1.08; letter-spacing: -.045em; max-width: 950px; }
-  .lead { font-size: clamp(18px, 2vw, 22px); color: var(--muted); max-width: 850px; margin-block: 24px 28px; }
-  .service-page__grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 64px; margin-block: 64px; align-items: start; }
-  h2 { font-size: 25px; line-height: 1.25; margin-bottom: 18px; }
-  article h2:not(:first-child) { margin-top: 38px; }
-  article p, article li { color: var(--muted); line-height: 1.75; }
-  article ul { list-style: disc; padding-left: 22px; }
-  article li + li { margin-top: 10px; }
-  aside { padding: 28px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper-2); }
-  aside p { color: var(--muted); }
-  address { font-style: normal; margin-block: 20px; line-height: 1.8; }
-  aside h2:not(:first-child) { margin-top: 32px; }
-  aside li + li { margin-top: 16px; }
-  a { text-underline-offset: 4px; }
-  @media(max-width: 800px) { .service-page__grid { grid-template-columns: 1fr; gap: 36px; } .breadcrumbs { margin-bottom: 36px; } }
+  .sp-hero { position: relative; padding: calc(var(--header-h) + clamp(32px, 6vw, 72px)) 0 clamp(48px, 6vw, 80px); background: var(--cream); overflow: hidden; }
+  .sp-hero::after { content: ""; position: absolute; width: 520px; height: 520px; top: -200px; right: -120px; border-radius: 50%; background: #c9cff3; filter: blur(70px); opacity: .5; pointer-events: none; }
+  .sp-hero .container { position: relative; z-index: 1; }
+  .breadcrumbs { font-size: .88rem; color: var(--muted); margin-bottom: 40px; }
+  .breadcrumbs a { color: var(--navy); font-weight: 600; }
+  .breadcrumbs a:hover { color: var(--red); }
+  h1 { font-size: clamp(2.4rem, 5.6vw, 4.4rem); line-height: 1.04; letter-spacing: -.04em; font-weight: 800; max-width: 950px; }
+  h1 .serif { font-size: 1.08em; letter-spacing: -.02em; }
+  .lead { font-size: clamp(1.05rem, 1.6vw, 1.25rem); max-width: 760px; margin: 24px 0 34px; }
+  .sp-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .sp-body { padding: clamp(64px, 9vw, 112px) 0; background: #fff; }
+  .sp-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: clamp(40px, 6vw, 80px); align-items: start; }
+  h2 { font-size: clamp(1.4rem, 2.4vw, 1.75rem); line-height: 1.2; margin-bottom: 16px; }
+  article h2:not(:first-child) { margin-top: 44px; }
+  article p { font-size: 1.05rem; }
+  .sp-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .sp-list li { position: relative; padding-left: 32px; font-weight: 550; color: var(--ink); }
+  .sp-list li::before { content: ""; position: absolute; left: 0; top: 4px; width: 20px; height: 20px; border-radius: 50%; background: var(--navy) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 12.5 4 4L18 8' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 13px no-repeat; }
+
+  aside { position: sticky; top: calc(var(--header-h) + 24px); display: grid; gap: 18px; }
+  .sp-card { padding: 28px; border-radius: var(--radius); background: var(--navy); color: rgba(255, 255, 255, .8); box-shadow: var(--shadow-lg); }
+  .sp-card h2 { color: #fff; }
+  address { font-style: normal; margin: 18px 0 22px; line-height: 1.8; color: #fff; }
+  address a { border-bottom: 1px solid rgba(255, 255, 255, .3); }
+  address a:hover { border-color: #fff; }
+  .sp-map { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; font-weight: 650; font-size: .92rem; color: var(--rose); }
+  .sp-other { padding: 28px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--paper); }
+  .sp-other ul { list-style: none; padding: 0; margin: 0; }
+  .sp-other li + li { border-top: 1px solid var(--line); }
+  .sp-other a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; font-weight: 600; color: var(--navy); transition: color .25s; }
+  .sp-other a:hover { color: var(--red); }
+
+  @media (max-width: 900px) {
+    .sp-grid { grid-template-columns: 1fr; }
+    aside { position: static; }
+  }
+
+  @media (max-width: 600px) {
+    .sp-actions .btn { width: 100%; }
+    .breadcrumbs { margin-bottom: 28px; }
+  }
 </style>

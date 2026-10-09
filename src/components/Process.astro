@@ -1,5 +1,6 @@
 ---
-import SectionLabel from './SectionLabel.astro';
+import Icon from './Icon.astro';
+import { wa } from '../data/site';
 
 const steps = [
   { title: 'Primeira conversa', text: 'Você apresenta a empresa, a rotina e as dúvidas que precisam de atenção.' },
@@ -9,165 +10,67 @@ const steps = [
 ];
 ---
 
-<section class="process" id="como-atendemos" aria-labelledby="process-title">
-  <div class="container process__inner">
-    <div class="process__head">
-      <div class="process__heading">
-        <SectionLabel number="04">Como atendemos</SectionLabel>
-        <h2 class="display" id="process-title">UM PROCESSO CLARO, DO PRIMEIRO CONTATO AO DIA A DIA.</h2>
-      </div>
-      <p class="process__intro">
-        Sem respostas prontas antes de ouvir. O atendimento começa pelo entendimento e continua com presença.
-      </p>
+<section class="section process" id="como-atendemos">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">04 · Como atendemos</span>
+      <h2 class="section-title">Um processo claro, <em class="serif">do primeiro contato ao dia a dia.</em></h2>
+      <p>Sem respostas prontas antes de ouvir. O atendimento começa pelo entendimento e continua com presença.</p>
     </div>
-
-    <ol class="steps">
-      {steps.map((step, index) => (
-        <li class="step">
-          <div class="step__top">
-            <span class="step__num">{String(index + 1).padStart(2, '0')}</span>
-            <span class="step__dot" aria-hidden="true"></span>
-          </div>
-          <div class="step__body">
-            <h3>{step.title}</h3>
-            <p>{step.text}</p>
-          </div>
+    <ol class="steps" data-steps>
+      {steps.map((step, i) => (
+        <li class="step reveal" style={`--d:${i * 80}ms`}>
+          <span class="step-dot" aria-hidden="true">{i + 1}</span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
         </li>
       ))}
     </ol>
+    <div class="process-cta reveal">
+      <a class="btn btn-primary btn-lg" {...wa('Olá! Gostaria de agendar uma primeira conversa com a Alfa Contabilidade.')}><Icon name="wa" /> Agendar a primeira conversa</a>
+    </div>
   </div>
 </section>
 
+<script>
+  // A linha entre as etapas se preenche conforme a seção sobe na tela
+  const list = document.querySelector<HTMLElement>('[data-steps]')!;
+  const items = [...list.querySelectorAll('.step')];
+  const update = () => {
+    const r = list.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const p = Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (vh * 0.55)));
+    list.style.setProperty('--fill', p.toFixed(3));
+    items.forEach((item, i) => item.classList.toggle('lit', p >= i / (items.length - 1) - 0.02));
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+</script>
+
 <style>
-  .process {
-    background: var(--white);
-    padding-block: var(--section-y);
+  .process { background: #fff; }
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; --fill: 0; }
+  .steps::before, .steps::after { content: ""; position: absolute; top: 27px; left: 28px; right: 28px; height: 2px; border-radius: 2px; }
+  .steps::before { background: var(--line); }
+  .steps::after { background: linear-gradient(90deg, var(--navy), var(--red)); transform-origin: left; transform: scaleX(var(--fill)); transition: transform .2s linear; }
+  .step { position: relative; z-index: 1; }
+  .step-dot {
+    width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: #fff; border: 2px solid var(--line);
+    font-family: var(--serif); font-style: italic; font-size: 1.6rem; color: var(--muted); margin-bottom: 24px;
+    transition: background .5s, border-color .5s, color .5s, transform .5s var(--ease);
+  }
+  .step.lit .step-dot { background: var(--navy); border-color: var(--navy); color: #fff; transform: scale(1.08); box-shadow: 0 0 0 8px var(--navy-50); }
+  .step h3 { font-size: 1.2rem; margin-bottom: 8px; }
+  .step p { color: var(--muted); font-size: .96rem; }
+  .process-cta { margin-top: 48px; text-align: center; }
+
+  @media (max-width: 900px) {
+    .steps { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+    .steps::before, .steps::after { display: none; }
   }
 
-  .process__inner {
-    display: flex;
-    flex-direction: column;
-    gap: 56px;
-  }
-
-  .process__head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 48px;
-  }
-
-  .process__heading {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
-    max-width: 720px;
-  }
-
-  .process__intro {
-    flex: 0 1 390px;
-    color: var(--muted);
-    font-size: 17px;
-    line-height: 1.55;
-  }
-
-  /* Bordas compartilhadas: a lista desenha topo/esquerda e cada passo desenha direita/base. */
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-top: 2px solid var(--ink);
-    border-left: 2px solid var(--ink);
-  }
-
-  .step {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 40px;
-    min-height: 274px;
-    padding: 28px 24px;
-    border-right: 2px solid var(--ink);
-    border-bottom: 2px solid var(--ink);
-    background: var(--white);
-  }
-
-  .step:first-child {
-    background: var(--paper);
-  }
-
-  .step__top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .step__num {
-    font-size: 15px;
-    font-weight: 900;
-  }
-
-  .step__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--ink);
-  }
-
-  .step:first-child .step__dot {
-    background: var(--terracotta);
-  }
-
-  .step__body {
-    display: flex;
-    flex-direction: column;
-    gap: 13px;
-  }
-
-  .step h3 {
-    font-size: 23px;
-    font-weight: 800;
-    line-height: 1.15;
-  }
-
-  .step p {
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  @media (max-width: 1024px) {
-    .process__head {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 24px;
-    }
-
-    .process__intro {
-      flex-basis: auto;
-      max-width: 560px;
-    }
-
-    .steps {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .step {
-      min-height: 220px;
-    }
-  }
-
-  @media (max-width: 560px) {
-    .steps {
-      grid-template-columns: 1fr;
-    }
-
-    .step {
-      min-height: 0;
-      gap: 28px;
-    }
+  @media (max-width: 600px) {
+    .steps { grid-template-columns: 1fr; }
   }
 </style>

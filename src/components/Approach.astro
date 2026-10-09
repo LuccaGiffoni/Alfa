@@ -1,179 +1,78 @@
 ---
-import { Image } from 'astro:assets';
-import SectionLabel from './SectionLabel.astro';
-import { photos, site } from '../data/site';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
 
-const points = [
-  { title: 'Contato próximo', text: 'Espaço para perguntar, compreender e decidir.' },
-  { title: 'Acompanhamento contínuo', text: 'Atenção à rotina, não só aos prazos.' },
+const distant = [
+  'Atendimento por ticket ou robô',
+  'A cada contato, uma pessoa diferente',
+  'Relatórios cheios de jargão',
+  'Só aparece quando o prazo aperta',
+  'Sem lugar para sentar e conversar',
+];
+const alfa = [
+  'Conversa direta pelo WhatsApp ou presencial',
+  'Quem atende conhece a sua empresa',
+  'Explicações claras, sem complicar',
+  'Atenção à rotina, não só aos prazos',
+  `Escritório em ${site.address.city}, desde ${site.foundingYear}`,
 ];
 ---
 
-<section class="approach" id="nosso-jeito" aria-labelledby="approach-title">
-  <div class="approach__grid">
-    <div class="approach__copy">
-      <SectionLabel number="03">Nosso jeito</SectionLabel>
-
-      <div class="approach__text">
-        <h2 class="display" id="approach-title" style="--max-size: 60px">A TECNOLOGIA AJUDA. A PRESENÇA ORIENTA.</h2>
-        <p>
-          Usamos ferramentas para organizar o trabalho, mas não substituímos conversa por distância. Quando surge uma
-          dúvida, você encontra escuta, contexto e uma explicação que faz sentido para a sua empresa.
-        </p>
+<section class="section way" id="nosso-jeito">
+  <div class="container">
+    <div class="section-head split reveal">
+      <div>
+        <span class="kicker">03 · Nosso jeito</span>
+        <h2 class="section-title">A tecnologia ajuda. <em class="serif">A presença orienta.</em></h2>
       </div>
-
-      <ul class="approach__points">
-        {points.map((point) => (
-          <li>
-            <span class="approach__dot" aria-hidden="true"></span>
-            <h3>{point.title}</h3>
-            <p>{point.text}</p>
-          </li>
-        ))}
-      </ul>
+      <p>Usamos ferramentas para organizar o trabalho, mas não substituímos conversa por distância. Quando surge uma dúvida, você encontra escuta, contexto e uma explicação que faz sentido.</p>
     </div>
 
-    <div class="approach__visual">
-      <Image src={photos.approach.src} alt={photos.approach.alt} widths={[480, 800, 1200, 1536]} sizes="(max-width: 960px) 100vw, 50vw" quality={85} loading="lazy" />
-      <div class="approach__band">
-        <p>Perto o bastante para entender o que não cabe em um formulário.</p>
-        <span>ALFA / {site.foundingYear}—HOJE</span>
+    <div class="compare reveal">
+      <div class="compare-col other">
+        <span class="compare-tag">Contabilidade distante</span>
+        <ul>
+          {distant.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div class="compare-col alfa">
+        <span class="compare-tag"><svg class="mini-logo" aria-hidden="true"><use href="#logo-a" /></svg> Com a Alfa</span>
+        <ul>
+          {alfa.map((item) => <li><Icon name="check" />{item}</li>)}
+        </ul>
       </div>
     </div>
+
+    <figure class="big-quote reveal">
+      <blockquote>Perto o bastante para entender <em class="serif">o que não cabe em um formulário.</em></blockquote>
+      <figcaption>ALFA / {site.foundingYear} — hoje</figcaption>
+    </figure>
   </div>
 </section>
 
 <style>
-  .approach {
-    background: var(--paper);
-  }
+  .way { background: var(--cream); }
+  .compare { display: grid; grid-template-columns: 1fr 1.15fr; gap: 18px; align-items: stretch; }
+  .compare-col { border-radius: var(--radius); padding: clamp(26px, 4vw, 40px); }
+  .compare-col ul { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 14px; }
+  .compare-col li { display: flex; align-items: flex-start; gap: 12px; font-weight: 550; }
+  .compare-tag { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; }
+  .compare-col.other { background: transparent; border: 1.5px dashed #cfccc0; color: var(--muted); }
+  .compare-col.other li::before { content: "✕"; flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: .7rem; background: #e7e4da; color: #9b988c; margin-top: 2px; }
+  .compare-col.other li { text-decoration: line-through; text-decoration-color: rgba(116, 119, 138, .4); }
+  .compare-col.alfa { background: var(--navy); color: #fff; box-shadow: var(--shadow-lg); transform: translateY(-10px); }
+  .compare-col.alfa .compare-tag { color: var(--rose); }
+  .compare-col.alfa li { font-size: 1.05rem; }
+  .compare-col.alfa li .ico { color: var(--navy); background: #fff; border-radius: 50%; padding: 4px; width: 24px; height: 24px; margin-top: 1px; }
+  .mini-logo { width: 14px; height: 20px; color: #fff; --logo-dot: var(--rose); }
 
-  .approach__grid {
-    display: grid;
-    grid-template-columns: minmax(0, 760fr) minmax(0, 680fr);
-    max-width: var(--max);
-    min-height: 790px;
-    margin-inline: auto;
-  }
+  .big-quote { margin: clamp(60px, 8vw, 100px) 0 0; text-align: center; }
+  .big-quote blockquote { margin: 0 auto; max-width: 900px; font-size: clamp(1.9rem, 4.4vw, 3.4rem); font-weight: 700; color: var(--ink); letter-spacing: -.035em; line-height: 1.12; }
+  .big-quote blockquote .serif { color: var(--red); }
+  .big-quote figcaption { margin-top: 20px; font-size: .8rem; letter-spacing: .3em; color: var(--muted); font-weight: 700; }
 
-  .approach__copy {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 48px;
-    padding: 92px 72px 80px var(--gutter);
-  }
-
-  .approach__text {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .approach__text p {
-    color: var(--muted);
-    font-size: clamp(17px, calc(0.4vw + 14px), 20px);
-    line-height: 1.55;
-  }
-
-  .approach__points {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px;
-    width: 100%;
-  }
-
-  .approach__points li {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding-top: 20px;
-    border-top: 2px solid var(--ink);
-  }
-
-  .approach__dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--red);
-  }
-
-  .approach__points h3 {
-    font-size: 16px;
-    font-weight: 800;
-  }
-
-  .approach__points p {
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.45;
-  }
-
-  .approach__visual {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .approach__visual img {
-    flex: 1 1 610px;
-    width: 100%;
-    min-height: 0;
-    object-fit: cover;
-  }
-
-  .approach__band {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24px;
-    min-height: 180px;
-    padding: 32px 34px;
-    background: var(--terracotta);
-    color: var(--white);
-  }
-
-  .approach__band p {
-    max-width: 350px;
-    font-size: 22px;
-    font-weight: 800;
-    line-height: 1.2;
-  }
-
-  .approach__band span {
-    flex: none;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-  }
-
-  @media (max-width: 960px) {
-    .approach__grid {
-      grid-template-columns: 1fr;
-      min-height: 0;
-    }
-
-    .approach__copy {
-      padding: var(--section-y) var(--gutter) 56px;
-    }
-
-    .approach__visual img {
-      flex: none;
-      aspect-ratio: 4 / 3;
-      height: auto;
-    }
-  }
-
-  @media (max-width: 560px) {
-    .approach__points {
-      grid-template-columns: 1fr;
-    }
-
-    .approach__band {
-      flex-direction: column;
-      align-items: flex-start;
-      min-height: 0;
-      padding: 28px var(--gutter);
-    }
+  @media (max-width: 900px) {
+    .compare { grid-template-columns: 1fr; }
+    .compare-col.alfa { transform: none; }
   }
 </style>

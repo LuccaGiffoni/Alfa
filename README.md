@@ -4,7 +4,7 @@ Site institucional da **ALFA Contabilidade** (Jacareí, desde 1981). Página ún
 
 ## Rodando localmente
 
-Requer Node 22 ou mais recente.
+Requer Node 22.12 ou mais recente.
 
 ```bash
 npm install
@@ -18,13 +18,14 @@ npm run preview  # serve o dist/ localmente
 
 | O quê | Onde |
 | --- | --- |
-| E-mail, WhatsApp, endereço, ano de fundação | `src/data/site.ts` |
-| Fotos | `src/assets/images/` (textos alternativos em `src/data/site.ts`) |
+| E-mail, WhatsApp, endereço, ano de fundação, menu | `src/data/site.ts` |
+| Fotos e textos alternativos | `src/assets/images/` e `src/data/photos.ts` |
+| Abas de serviços da home e páginas `/servicos/` | `src/data/services.ts` |
 | Textos de cada seção | `src/components/<Seção>.astro` |
-| Cores, fonte, espaçamentos | `src/styles/global.css` (variáveis em `:root`) |
+| Cores, fontes, botões e espaçamentos | `src/styles/global.css` (variáveis em `:root`); o estilo de cada seção fica no próprio componente |
 | Título e descrição para buscadores | `src/pages/index.astro` |
 
-Para trocar uma foto, substitua o arquivo em `src/assets/images/` (mesmo nome) ou importe outro em `src/data/site.ts`. O build converte as fotos para WebP automaticamente.
+Para trocar uma foto, substitua o arquivo em `src/assets/images/` (mesmo nome) ou importe outro em `src/data/photos.ts`. O build converte as fotos para WebP automaticamente.
 
 ## Deploy (GitHub Pages)
 
